@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>세계 시계</title>
+<link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+<style>
+:root {
+  color-scheme: light dark;
+  --ui-font: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+
+  --bg-page: transparent;
+  --text-main: #111111;
+  --text-sub: #444444;
+  --select-text: #111111;
+  --select-label: #444444;
+  --select-border: #cfcfcf;
+  --select-border-hover: #b8b8b8;
+  --select-border-focus: #999999;
+  --select-bg: transparent;
+  --option-bg: #ffffff;
+  --option-text: #111111;
+
+  --hand: #111111;
+  --second-hand: #111111;
+  --center-dot: #111111;
+  --tick-major: rgba(17,17,17,0.9);
+  --tick-minor: rgba(17,17,17,0.5);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-page: transparent;
+    --text-main: #f5f5f5;
+    --text-sub: #d6d6d6;
+    --select-text: #f5f5f5;
+    --select-label: #d6d6d6;
+    --select-border: #666666;
+    --select-border-hover: #7a7a7a;
+    --select-border-focus: #8d8d8d;
+    --select-bg: transparent;
+    --option-bg: #1e1e1e;
+    --option-text: #ffffff;
+
+    --hand: #f5f5f5;
+    --second-hand: #f5f5f5;
+    --center-dot: #f5f5f5;
+    --tick-major: rgba(245,245,245,0.9);
+    --tick-minor: rgba(245,245,245,0.5);
+  }
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--ui-font);
+  background: var(--bg-page);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.clock-face {
+  position: relative;
+  width: min(78vw, 300px);
+  height: min(78vw, 300px);
+  border-radius: 50%;
+  background: transparent;
+}
+
+.hand {
+  position: absolute;
+  left: 50%;
+  bottom: 50%;
+  transform-origin: bottom center;
+  border-radius: 999px;
+  background: var(--hand);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.hand.hour {
+  width: 3px;
+  height: 72px;
+  margin-left: -1.5px;
+}
+
+.hand.minute {
+  width: 2px;
+  height: 108px;
+  margin-left: -1px;
+}
+
+.hand.second {
+  width: 1px;
+  height: 120px;
+  margin-left: -0.5px;
+  background: var(--second-hand);
+  opacity: 1;
+}
+
+.center-dot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  margin: -3.5px 0 0 -3.5px;
+  border-radius: 50%;
+  background: var(--center-dot);
+  z-index: 5;
+}
+
+.digital-block {
+  position: absolute;
+  left: 50%;
+  top: 62%;
+  transform: translateX(-50%);
+  text-align: center;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.time-str {
+  font-size: 26px;
+  font-weight: 500;
+  color: var(--text-main);
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+.date-str {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--text-sub);
+  font-weight: 400;
+  letter-spacing: 0.03em;
+}
+
+/* ── 출장 타이틀 ── */
+.trip-title {
+  font-size: clamp(13px, 3.5vw, 17px);
+  font-weight: 600;
+  color: var(--text-sub);
+  letter-spacing: 0.08em;
+  text-align: center;
+  user-select: none;
+}
+
+.select-area {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: min(82vw, 260px);
+}
+
+select {
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--select-border);
+  background: var(--select-bg);
+  color: var(--select-text);
+  font-size: 14px;
+  font-family: var(--ui-font);
+  font-weight: 400;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+
+select:hover { border-color: var(--select-border-hover); }
+select:focus { border-color: var(--select-border-focus); }
+
+option { background: var(--option-bg); color: var(--option-text); }
+
+@media (max-width: 480px) {
+  .clock-face {
+    width: min(82vw, 300px);
+    height: min(82vw, 300px);
+  }
+  .hand.hour   { height: 62px;  margin-left: -1.5px; }
+  .hand.minute { height: 88px;  margin-left: -1px; }
+  .hand.second { height: 100px; margin-left: -0.5px; }
+  .time-str { font-size: 22px; }
+  .date-str { font-size: 12px; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="trip-title">▼ 해외 출장 시간 ▼</div>
+
+  <div class="select-area">
+    <select id="tzSel">
+      <!-- 아시아 -->
+      <option value="Asia/Seoul">대한민국 / 서울</option>
+      <option value="Asia/Tokyo">일본 / 도쿄</option>
+      <option value="Asia/Shanghai">중국 / 상하이</option>
+      <option value="Asia/Singapore">싱가포르</option>
+      <option value="Asia/Brunei">브루나이</option>
+      <option value="Asia/Manila">필리핀 / 마닐라</option>
+      <option value="Asia/Ho_Chi_Minh">베트남 / 호치민</option>
+      <option value="Asia/Bangkok">태국 / 방콕</option>
+      <option value="Asia/Jakarta">인도네시아 / 자카르타</option>
+      <option value="Asia/Kolkata">인도 / 뉴델리</option>
+      <option value="Asia/Tashkent">우즈베키스탄 / 타슈켄트</option>
+      <option value="Asia/Dubai">아랍에미리트 / 두바이</option>
+      <!-- 유럽 -->
+      <option value="Europe/London">영국 / 런던</option>
+      <option value="Europe/Paris">프랑스 / 파리</option>
+      <option value="Europe/Berlin">독일 / 베를린</option>
+      <option value="Europe/Warsaw">폴란드 / 바르샤바</option>
+      <option value="Europe/Kyiv">우크라이나 / 키이우</option>
+      <option value="Europe/Istanbul">튀르키에 / 이스탄불</option>
+      <option value="Europe/Moscow">러시아 / 모스크바</option>
+      <!-- 아메리카 -->
+      <option value="America/New_York">미국 / 뉴욕</option>
+      <option value="America/Chicago">미국 / 시카고</option>
+      <option value="America/Denver">미국 / 덴버</option>
+      <option value="America/Los_Angeles">미국 / 로스앤젤레스</option>
+      <option value="America/Toronto">캐나다 / 토론토</option>
+      <option value="America/Puerto_Rico">푸에르토리코</option>
+      <option value="America/Sao_Paulo">브라질 / 상파울루</option>
+      <option value="America/Santiago">칠레 / 산티아고</option>
+      <!-- 오세아니아 -->
+      <option value="Australia/Sydney">호주 / 시드니</option>
+      <option value="Pacific/Auckland">뉴질랜드 / 오클랜드</option>
+    </select>
+  </div>
+
+  <div class="clock-face" id="clockFace">
+    <div class="digital-block">
+      <div class="time-str" id="timeStr">00:00:00</div>
+      <div class="date-str" id="dateStr">04월 23일 (목)</div>
+    </div>
+  </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const face    = document.getElementById('clockFace');
+  const tzSel   = document.getElementById('tzSel');
+  const timeStr = document.getElementById('timeStr');
+  const dateStr = document.getElementById('dateStr');
+
+  const STORAGE_KEY = "tz";
+  const VERSION_KEY = "tz_version";
+
+  // 여기에 나라를 작성
+  const DEFAULT_TZ = "Asia/Kolkata";
+
+  // 여기에 버전을 작성
+  const DEFAULT_TZ_VERSION = "2026-04-23-2";
+
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.style.cssText = 'position:absolute;top:0;left:0;pointer-events:none;';
+  face.appendChild(svg);
+
+  function applyTickColors() {
+    const styles = getComputedStyle(document.documentElement);
+    const major  = styles.getPropertyValue('--tick-major').trim();
+    const minor  = styles.getPropertyValue('--tick-minor').trim();
+    [...svg.querySelectorAll('line')].forEach((line, i) => {
+      line.setAttribute('stroke', i % 3 === 0 ? major : minor);
+      line.setAttribute('opacity', '1');
+    });
+  }
+
+  function drawTicks() {
+    const SIZE = face.clientWidth;
+    const CX   = SIZE / 2;
+    const CY   = SIZE / 2;
+    svg.setAttribute('width',  SIZE);
+    svg.setAttribute('height', SIZE);
+    svg.innerHTML = '';
+
+    for (let i = 0; i < 12; i++) {
+      const rad    = (i * 30 - 90) * Math.PI / 180;
+      const outerR = CX - (SIZE * 0.033);
+      const len    = i % 3 === 0 ? SIZE * 0.047 : SIZE * 0.03;
+      const innerR = outerR - len;
+      const line   = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', CX + outerR * Math.cos(rad));
+      line.setAttribute('y1', CY + outerR * Math.sin(rad));
+      line.setAttribute('x2', CX + innerR * Math.cos(rad));
+      line.setAttribute('y2', CY + innerR * Math.sin(rad));
+      line.setAttribute('stroke-width',   i % 3 === 0 ? '2' : '1.5');
+      line.setAttribute('stroke-linecap', 'round');
+      svg.appendChild(line);
+    }
+    applyTickColors();
+  }
+
+  ['hour', 'minute', 'second'].forEach(cls => {
+    const d = document.createElement('div');
+    d.className = 'hand ' + cls;
+    face.appendChild(d);
+    face['_' + cls] = d;
+  });
+
+  const dot = document.createElement('div');
+  dot.className = 'center-dot';
+  face.appendChild(dot);
+
+  function getTimeParts(timeZone) {
+    const now  = new Date();
+    const fmt  = new Intl.DateTimeFormat('ko-KR', {
+      timeZone,
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      weekday: 'short',
+      hour: '2-digit', minute: '2-digit', second: '2-digit',
+      hourCycle: 'h23'
+    });
+    const map = {};
+    fmt.formatToParts(now).forEach(p => { map[p.type] = p.value; });
+    return {
+      year: Number(map.year), month: Number(map.month), day: Number(map.day),
+      weekday: map.weekday,
+      hour: Number(map.hour), minute: Number(map.minute), second: Number(map.second),
+      ms: now.getMilliseconds()
+    };
+  }
+
+  function loadTimezone() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    const ver   = localStorage.getItem(VERSION_KEY);
+    if (ver !== DEFAULT_TZ_VERSION) {
+      tzSel.value = DEFAULT_TZ;
+      localStorage.setItem(STORAGE_KEY, DEFAULT_TZ);
+      localStorage.setItem(VERSION_KEY, DEFAULT_TZ_VERSION);
+    } else {
+      tzSel.value = saved || DEFAULT_TZ;
+    }
+  }
+
+  function tick() {
+    const t = getTimeParts(tzSel.value);
+    const smoothSecond = t.second + t.ms / 1000;
+    const smoothMinute = t.minute + smoothSecond / 60;
+    const smoothHour   = (t.hour % 12) + smoothMinute / 60;
+
+    face._hour.style.transform   = `rotate(${smoothHour   * 30}deg)`;
+    face._minute.style.transform = `rotate(${smoothMinute *  6}deg)`;
+    face._second.style.transform = `rotate(${smoothSecond *  6}deg)`;
+
+    timeStr.textContent = [t.hour, t.minute, t.second]
+      .map(n => String(n).padStart(2, '0')).join(':');
+    dateStr.textContent =
+      `${String(t.month).padStart(2,'0')}월 ${String(t.day).padStart(2,'0')}일 (${t.weekday})`;
+
+    requestAnimationFrame(tick);
+  }
+
+  tzSel.addEventListener('change', () => {
+    localStorage.setItem(STORAGE_KEY, tzSel.value);
+    localStorage.setItem(VERSION_KEY, DEFAULT_TZ_VERSION);
+  });
+
+  const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  if (darkQuery.addEventListener) {
+    darkQuery.addEventListener('change', applyTickColors);
+  } else if (darkQuery.addListener) {
+    darkQuery.addListener(applyTickColors);
+  }
+
+  window.addEventListener('resize', drawTicks);
+
+  loadTimezone();
+  drawTicks();
+  tick();
+});
+</script>
+</body>
+</html>
