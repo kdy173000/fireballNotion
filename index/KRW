@@ -52,18 +52,18 @@
       <label id="labelFromM">KRW</label>
       <input type="text" id="fromAmountM" placeholder="10000" inputmode="decimal">
       <select id="fromCurrencyM">
-        <option value="KRW">KRW — 한국 원</option>
-        <option value="USD">USD — 미국 달러</option>
-        <option value="EUR">EUR — 유로</option>
-        <option value="JPY">JPY — 일본 엔</option>
-        <option value="CNY">CNY — 중국 위안</option>
-        <option value="GBP">GBP — 영국 파운드</option>
-        <option value="HKD">HKD — 홍콩 달러</option>
-        <option value="AUD">AUD — 호주 달러</option>
-        <option value="CAD">CAD — 캐나다 달러</option>
-        <option value="SGD">SGD — 싱가포르 달러</option>
-        <option value="THB">THB — 태국 바트</option>
-        <option value="VND">VND — 베트남 동</option>
+        <option value="KRW">🇰🇷 KRW — 한국 원</option>
+        <option value="USD">🇺🇸 USD — 미국 달러</option>
+        <option value="EUR">🇪🇺 EUR — 유로</option>
+        <option value="JPY">🇯🇵 JPY — 일본 엔</option>
+        <option value="CNY">🇨🇳 CNY — 중국 위안</option>
+        <option value="GBP">🇬🇧 GBP — 영국 파운드</option>
+        <option value="HKD">🇭🇰 HKD — 홍콩 달러</option>
+        <option value="AUD">🇦🇺 AUD — 호주 달러</option>
+        <option value="CAD">🇨🇦 CAD — 캐나다 달러</option>
+        <option value="SGD">🇸🇬 SGD — 싱가포르 달러</option>
+        <option value="THB">🇹🇭 THB — 태국 바트</option>
+        <option value="VND">🇻🇳 VND — 베트남 동</option>
       </select>
     </div>
     <div class="mobile-swap-row">
@@ -73,21 +73,23 @@
       <label id="labelToM">USD</label>
       <input type="text" id="toAmountM" placeholder="7.25" inputmode="decimal">
       <select id="toCurrencyM">
-        <option value="USD">USD — 미국 달러</option>
-        <option value="KRW">KRW — 한국 원</option>
-        <option value="EUR">EUR — 유로</option>
-        <option value="JPY">JPY — 일본 엔</option>
-        <option value="CNY">CNY — 중국 위안</option>
-        <option value="GBP">GBP — 영국 파운드</option>
-        <option value="HKD">HKD — 홍콩 달러</option>
-        <option value="AUD">AUD — 호주 달러</option>
-        <option value="CAD">CAD — 캐나다 달러</option>
-        <option value="SGD">SGD — 싱가포르 달러</option>
-        <option value="THB">THB — 태국 바트</option>
-        <option value="VND">VND — 베트남 동</option>
+        <option value="USD">🇺🇸 USD — 미국 달러</option>
+        <option value="KRW">🇰🇷 KRW — 한국 원</option>
+        <option value="EUR">🇪🇺 EUR — 유로</option>
+        <option value="JPY">🇯🇵 JPY — 일본 엔</option>
+        <option value="CNY">🇨🇳 CNY — 중국 위안</option>
+        <option value="GBP">🇬🇧 GBP — 영국 파운드</option>
+        <option value="HKD">🇭🇰 HKD — 홍콩 달러</option>
+        <option value="AUD">🇦🇺 AUD — 호주 달러</option>
+        <option value="CAD">🇨🇦 CAD — 캐나다 달러</option>
+        <option value="SGD">🇸🇬 SGD — 싱가포르 달러</option>
+        <option value="THB">🇹🇭 THB — 태국 바트</option>
+        <option value="VND">🇻🇳 VND — 베트남 동</option>
       </select>
     </div>
   </div>
+
+  <div class="rate-info" id="rateInfo">1 KRW = 0.000681 USD  ·  open.er-api.com</div>
 </div>
 <style>
 :root{
@@ -106,6 +108,9 @@
   --gap: 20px;
   --btn-w: 24px;
   --total-mid: calc(var(--btn-w) + var(--gap) * 2);
+}
+	.rate-info{
+  display: none;
 }
 @media (prefers-color-scheme: dark){
   :root{
