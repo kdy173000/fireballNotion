@@ -1,0 +1,379 @@
+<html><head><link rel="stylesheet" as="style" crossorigin="" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+</head><body><div class="currency-calculator">
+  <h2 class="calc-title">환율 계산기</h2>
+
+  <!-- PC 레이아웃 -->
+  <div class="calc-row pc-only">
+    <div class="col">
+      <label id="labelFromPC">KRW</label>
+      <input type="text" id="fromAmountPC" placeholder="10000" inputmode="decimal">
+    </div>
+    <button class="swap-btn" id="swapBtnPC" aria-label="통화 교체">⇄</button>
+    <div class="col">
+      <label id="labelToPC">USD</label>
+      <input type="text" id="toAmountPC" placeholder="7.25" inputmode="decimal">
+    </div>
+  </div>
+  <div class="select-row pc-only">
+    <select id="fromCurrencyPC">
+      <option value="KRW">🇰🇷 KRW — 한국 원</option>
+      <option value="USD">🇺🇸 USD — 미국 달러</option>
+      <option value="EUR">🇪🇺 EUR — 유로</option>
+      <option value="JPY">🇯🇵 JPY — 일본 엔</option>
+      <option value="CNY">🇨🇳 CNY — 중국 위안</option>
+      <option value="GBP">🇬🇧 GBP — 영국 파운드</option>
+      <option value="HKD">🇭🇰 HKD — 홍콩 달러</option>
+      <option value="AUD">🇦🇺 AUD — 호주 달러</option>
+      <option value="CAD">🇨🇦 CAD — 캐나다 달러</option>
+      <option value="SGD">🇸🇬 SGD — 싱가포르 달러</option>
+      <option value="THB">🇹🇭 THB — 태국 바트</option>
+      <option value="VND">🇻🇳 VND — 베트남 동</option>
+    </select>
+    <div class="mid-gap"></div>
+    <select id="toCurrencyPC">
+      <option value="USD">🇺🇸 USD — 미국 달러</option>
+      <option value="KRW">🇰🇷 KRW — 한국 원</option>
+      <option value="EUR">🇪🇺 EUR — 유로</option>
+      <option value="JPY">🇯🇵 JPY — 일본 엔</option>
+      <option value="CNY">🇨🇳 CNY — 중국 위안</option>
+      <option value="GBP">🇬🇧 GBP — 영국 파운드</option>
+      <option value="HKD">🇭🇰 HKD — 홍콩 달러</option>
+      <option value="AUD">🇦🇺 AUD — 호주 달러</option>
+      <option value="CAD">🇨🇦 CAD — 캐나다 달러</option>
+      <option value="SGD">🇸🇬 SGD — 싱가포르 달러</option>
+      <option value="THB">🇹🇭 THB — 태국 바트</option>
+      <option value="VND">🇻🇳 VND — 베트남 동</option>
+    </select>
+  </div>
+
+  <!-- 모바일 레이아웃 -->
+  <div class="mobile-only">
+    <div class="mobile-block">
+      <label id="labelFromM">KRW</label>
+      <input type="text" id="fromAmountM" placeholder="10000" inputmode="decimal">
+      <select id="fromCurrencyM">
+        <option value="KRW">KRW — 한국 원</option>
+        <option value="USD">USD — 미국 달러</option>
+        <option value="EUR">EUR — 유로</option>
+        <option value="JPY">JPY — 일본 엔</option>
+        <option value="CNY">CNY — 중국 위안</option>
+        <option value="GBP">GBP — 영국 파운드</option>
+        <option value="HKD">HKD — 홍콩 달러</option>
+        <option value="AUD">AUD — 호주 달러</option>
+        <option value="CAD">CAD — 캐나다 달러</option>
+        <option value="SGD">SGD — 싱가포르 달러</option>
+        <option value="THB">THB — 태국 바트</option>
+        <option value="VND">VND — 베트남 동</option>
+      </select>
+    </div>
+    <div class="mobile-swap-row">
+      <button class="swap-btn-m" id="swapBtnM" aria-label="통화 교체">⇅</button>
+    </div>
+    <div class="mobile-block">
+      <label id="labelToM">USD</label>
+      <input type="text" id="toAmountM" placeholder="7.25" inputmode="decimal">
+      <select id="toCurrencyM">
+        <option value="USD">USD — 미국 달러</option>
+        <option value="KRW">KRW — 한국 원</option>
+        <option value="EUR">EUR — 유로</option>
+        <option value="JPY">JPY — 일본 엔</option>
+        <option value="CNY">CNY — 중국 위안</option>
+        <option value="GBP">GBP — 영국 파운드</option>
+        <option value="HKD">HKD — 홍콩 달러</option>
+        <option value="AUD">AUD — 호주 달러</option>
+        <option value="CAD">CAD — 캐나다 달러</option>
+        <option value="SGD">SGD — 싱가포르 달러</option>
+        <option value="THB">THB — 태국 바트</option>
+        <option value="VND">VND — 베트남 동</option>
+      </select>
+    </div>
+  </div>
+</div>
+<style>
+:root{
+  color-scheme: light dark;
+  --ui-font: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  --calc-border: #d9d9d9;
+  --text-main: #111111;
+  --text-sub: #444444;
+  --input-border: #cfcfcf;
+  --placeholder: #9a9a9a;
+  --rate-bg: #f5f5f5;
+  --rate-color: #555555;
+  --swap-color: #666666;
+  --swap-hover: #222222;
+  --select-bg: #ffffff;
+  --gap: 20px;
+  --btn-w: 24px;
+  --total-mid: calc(var(--btn-w) + var(--gap) * 2);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --calc-border: #6b6b6b;
+    --text-main: #f5f5f5;
+    --text-sub: #d6d6d6;
+    --input-border: #666666;
+    --placeholder: #9b9b9b;
+    --rate-bg: #2a2a2a;
+    --rate-color: #aaaaaa;
+    --swap-color: #aaaaaa;
+    --swap-hover: #f5f5f5;
+    --select-bg: #3a3a3a;
+  }
+}
+.currency-calculator{
+  font-family: var(--ui-font);
+  border: 1px solid var(--calc-border);
+  border-radius: 14px;
+  padding: 30px;
+  max-width: 700px;
+  margin: auto;
+  background: transparent;
+  color: var(--text-main);
+}
+.calc-title{
+  text-align: center;
+  margin: 0 0 25px 0;
+  font-size: 26px;
+  font-weight: 700;
+}
+/* PC */
+.pc-only{ display: flex; }
+.mobile-only{ display: none; }
+.calc-row{
+  align-items: center;
+  gap: var(--gap);
+}
+.col{ flex: 1; min-width: 0; }
+.col label{
+  display: block;
+  color: var(--text-sub);
+  font-weight: 500;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+.swap-btn{
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: var(--swap-color);
+  cursor: pointer;
+  width: var(--btn-w);
+  flex-shrink: 0;
+  padding: 0;
+  margin-top: 20px;
+  line-height: 1;
+  text-align: center;
+  transition: color 0.15s;
+}
+.swap-btn:hover{ color: var(--swap-hover); }
+.select-row{
+  display: flex;
+  align-items: center;
+  margin-top: 12px;
+}
+.mid-gap{
+  width: var(--total-mid);
+  flex-shrink: 0;
+}
+input{
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid var(--input-border);
+  font-size: 16px;
+  font-family: var(--ui-font);
+  background: transparent !important;
+  color: var(--text-main);
+  outline: none;
+  box-sizing: border-box;
+}
+input::placeholder{ color: var(--placeholder); }
+select{
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  padding: 8px 32px 8px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--input-border);
+  font-size: 14px;
+  font-family: var(--ui-font);
+  background-color: var(--select-bg);
+  color: var(--text-main);
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  box-sizing: border-box;
+}
+.rate-info{
+  margin-top: 14px;
+  font-size: 13px;
+  color: var(--rate-color);
+  background: var(--rate-bg);
+  border-radius: 8px;
+  padding: 8px 14px;
+  text-align: center;
+}
+/* 모바일 */
+@media (max-width: 480px){
+  .pc-only{ display: none !important; }
+  .mobile-only{ display: block; }
+  .currency-calculator{ padding: 20px; }
+  .calc-title{ font-size: 22px; }
+  .mobile-block{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .mobile-block label{
+    color: var(--text-sub);
+    font-weight: 500;
+    font-size: 14px;
+  }
+  .mobile-swap-row{
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+  }
+  .swap-btn-m{
+    background: none;
+    border: none;
+    font-size: 22px;
+    color: var(--swap-color);
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    transition: color 0.15s;
+  }
+  .swap-btn-m:hover{ color: var(--swap-hover); }
+}
+</style>
+<script>
+let rates = {};
+let isUpdating = false;
+let isMobile = () => window.innerWidth <= 480;
+
+async function fetchRates(base) {
+  const apis = [
+    () => fetch(`https://open.er-api.com/v6/latest/${base}`).then(r=>r.json()).then(d=>d.rates),
+    () => fetch(`https://api.frankfurter.app/latest?from=${base}`).then(r=>r.json()).then(d=>d.rates),
+  ];
+  for (const api of apis) {
+    try { const r = await api(); if (r) return r; } catch(e) {}
+  }
+  return null;
+}
+
+function getFrom()  { return isMobile() ? document.getElementById('fromCurrencyM') : document.getElementById('fromCurrencyPC'); }
+function getTo()    { return isMobile() ? document.getElementById('toCurrencyM')   : document.getElementById('toCurrencyPC'); }
+function getFromInput() { return isMobile() ? document.getElementById('fromAmountM') : document.getElementById('fromAmountPC'); }
+function getToInput()   { return isMobile() ? document.getElementById('toAmountM')   : document.getElementById('toAmountPC'); }
+
+function getRate() { return rates[getTo().value] || null; }
+
+function formatAmount(val, currency) {
+  if (isNaN(val)) return '';
+  if (['JPY','KRW','VND'].includes(currency)) return val.toFixed(0);
+  return val.toFixed(2);
+}
+
+function updateLabels() {
+  document.getElementById('labelFromPC').textContent = document.getElementById('fromCurrencyPC').value;
+  document.getElementById('labelToPC').textContent   = document.getElementById('toCurrencyPC').value;
+  document.getElementById('labelFromM').textContent  = document.getElementById('fromCurrencyM').value;
+  document.getElementById('labelToM').textContent    = document.getElementById('toCurrencyM').value;
+}
+
+function syncSelects(changedId, val) {
+  const pairs = {
+    fromCurrencyPC: 'fromCurrencyM',
+    fromCurrencyM:  'fromCurrencyPC',
+    toCurrencyPC:   'toCurrencyM',
+    toCurrencyM:    'toCurrencyPC',
+  };
+  const partner = document.getElementById(pairs[changedId]);
+  if (partner) partner.value = val;
+}
+
+function updateRateInfo() {
+  const rate = getRate();
+  const rateInfo = document.getElementById('rateInfo');
+  if (rate) {
+    rateInfo.textContent = `1 ${getFrom().value} = ${rate.toLocaleString('ko-KR', {maximumFractionDigits:6})} ${getTo().value}  ·  open.er-api.com`;
+  } else {
+    rateInfo.textContent = '환율 정보를 불러올 수 없습니다.';
+  }
+}
+
+async function loadRates() {
+  document.getElementById('rateInfo').textContent = '환율 불러오는 중...';
+  rates = await fetchRates(getFrom().value) || {};
+  updateRateInfo();
+  convertFrom();
+}
+
+function convertFrom() {
+  if (isUpdating) return;
+  isUpdating = true;
+  const val = parseFloat(getFromInput().value.replace(/,/g,''));
+  const rate = getRate();
+  if (!isNaN(val) && rate) getToInput().value = formatAmount(val * rate, getTo().value);
+  else getToInput().value = '';
+  isUpdating = false;
+}
+
+function convertTo() {
+  if (isUpdating) return;
+  isUpdating = true;
+  const val = parseFloat(getToInput().value.replace(/,/g,''));
+  const rate = getRate();
+  if (!isNaN(val) && rate) getFromInput().value = formatAmount(val / rate, getFrom().value);
+  else getFromInput().value = '';
+  isUpdating = false;
+}
+
+function doSwap() {
+  const fromSel = getFrom(), toSel = getTo();
+  const tmp = fromSel.value;
+  fromSel.value = toSel.value;
+  toSel.value = tmp;
+  syncSelects(fromSel.id, fromSel.value);
+  syncSelects(toSel.id, toSel.value);
+  const fromIn = getFromInput(), toIn = getToInput();
+  const tmpVal = fromIn.value;
+  fromIn.value = toIn.value;
+  toIn.value = tmpVal;
+  updateLabels();
+  loadRates();
+}
+
+// PC 이벤트
+document.getElementById('fromAmountPC').addEventListener('input', convertFrom);
+document.getElementById('toAmountPC').addEventListener('input', convertTo);
+document.getElementById('fromCurrencyPC').addEventListener('change', e => {
+  syncSelects('fromCurrencyPC', e.target.value); updateLabels(); loadRates();
+});
+document.getElementById('toCurrencyPC').addEventListener('change', e => {
+  syncSelects('toCurrencyPC', e.target.value); updateLabels(); updateRateInfo(); convertFrom();
+});
+document.getElementById('swapBtnPC').addEventListener('click', doSwap);
+
+// 모바일 이벤트
+document.getElementById('fromAmountM').addEventListener('input', convertFrom);
+document.getElementById('toAmountM').addEventListener('input', convertTo);
+document.getElementById('fromCurrencyM').addEventListener('change', e => {
+  syncSelects('fromCurrencyM', e.target.value); updateLabels(); loadRates();
+});
+document.getElementById('toCurrencyM').addEventListener('change', e => {
+  syncSelects('toCurrencyM', e.target.value); updateLabels(); updateRateInfo(); convertFrom();
+});
+document.getElementById('swapBtnM').addEventListener('click', doSwap);
+
+updateLabels();
+loadRates();
+</script>
+</body></html>
