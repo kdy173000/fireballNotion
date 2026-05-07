@@ -33,16 +33,26 @@
       </div>
 
       <div class="field-col">
-        <label>물</label>
-        <input type="text" id="waterAmount" placeholder="" inputmode="decimal">
-      </div>
-
-      <div class="field-col">
-        <label>원액</label>
-        <input type="text" id="shampooAmount" placeholder="" inputmode="decimal">
-      </div>
+  <div class="field-label-row">
+    <label>물</label>
+    <div class="unit-inside" data-target="waterAmount">
+      <button type="button" class="unit-btn active" data-unit="ml">ml</button>
+      <button type="button" class="unit-btn" data-unit="L">L</button>
     </div>
   </div>
+  <input type="text" id="waterAmount" placeholder="" inputmode="decimal">
+</div>
+
+<div class="field-col">
+  <div class="field-label-row">
+    <label>원액</label>
+    <div class="unit-inside" data-target="shampooAmount">
+      <button type="button" class="unit-btn active" data-unit="ml">ml</button>
+      <button type="button" class="unit-btn" data-unit="L">L</button>
+    </div>
+  </div>
+  <input type="text" id="shampooAmount" placeholder="" inputmode="decimal">
+</div>
 </div>
 
 <style>
