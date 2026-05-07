@@ -1,0 +1,408 @@
+<html>
+<head>
+<style>
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* =========================
+     LIGHT MODE (기본)
+  ========================= */
+
+  :root {
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f5f5f5;
+
+    --color-text-primary: #111111;
+    --color-text-secondary: #666666;
+    --color-text-tertiary: #999999;
+
+    --color-border-primary: #111111;
+    --color-border-secondary: #dcdcdc;
+    --color-border-tertiary: #e5e5e5;
+
+    --border-radius-md: 10px;
+    --border-radius-lg: 16px;
+
+    --font-sans: -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      sans-serif;
+  }
+
+  /* =========================
+     DARK MODE (자동 적용)
+  ========================= */
+
+  @media (prefers-color-scheme: dark) {
+
+    :root {
+
+      --color-background-primary: #121212;
+      --color-background-secondary: #1e1e1e;
+
+      --color-text-primary: #f3f3f3;
+      --color-text-secondary: #b5b5b5;
+      --color-text-tertiary: #8c8c8c;
+
+      --color-border-primary: #8a8a8a;
+      --color-border-secondary: #333333;
+      --color-border-tertiary: #2a2a2a;
+    }
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--color-background-primary);
+    color: var(--color-text-primary);
+    transition:
+      background 0.25s ease,
+      color 0.25s ease;
+  }
+
+  .wrap {
+    padding: 2rem 1rem;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .title {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+  }
+
+  .fields {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    min-width: 90px;
+  }
+
+  .field-group label {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+  }
+
+  .field-group input {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 16px;
+    font-weight: 500;
+
+    border: 0.5px solid var(--color-border-secondary);
+    border-radius: var(--border-radius-md);
+
+    background: var(--color-background-primary);
+    color: var(--color-text-primary);
+
+    text-align: center;
+    outline: none;
+
+    transition:
+      border-color 0.15s,
+      background 0.25s,
+      color 0.25s;
+  }
+
+  .field-group input:focus {
+    border-color: var(--color-border-primary);
+  }
+
+  .sep {
+    font-size: 18px;
+    color: var(--color-text-tertiary);
+    padding-top: 20px;
+    flex-shrink: 0;
+  }
+
+  .result-card {
+
+    background: var(--color-background-secondary);
+
+    border-radius: var(--border-radius-lg);
+
+    padding: 1.25rem 1.5rem;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    transition: background 0.25s;
+  }
+
+  .result-label {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+  }
+
+  .result-value {
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+
+    transition: color 0.25s;
+  }
+
+  .result-value.up {
+    color: #1D9E75;
+  }
+
+  .result-value.down {
+    color: #D85A30;
+  }
+
+  .diff {
+    font-size: 12px;
+    color: var(--color-text-tertiary);
+    margin-top: 4px;
+    text-align: right;
+  }
+
+  .reset-btn {
+
+    margin-top: 1.25rem;
+
+    width: 100%;
+    padding: 9px;
+
+    font-size: 13px;
+
+    color: var(--color-text-secondary);
+
+    background: transparent;
+
+    border: 0.5px solid var(--color-border-tertiary);
+
+    border-radius: var(--border-radius-md);
+
+    cursor: pointer;
+
+    transition:
+      background 0.2s,
+      border-color 0.2s;
+  }
+
+  .reset-btn:hover {
+    background: var(--color-background-secondary);
+  }
+
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+  <h2 class="sr-only">퍼센트 변화율 계산기</h2>
+
+  <p class="title">% calculator</p>
+
+  <div class="fields">
+
+    <div class="field-group">
+      <label>전</label>
+
+      <input
+        type="number"
+        id="before"
+        placeholder="0"
+        inputmode="decimal">
+    </div>
+
+    <span class="sep">→</span>
+
+    <div class="field-group">
+      <label>후</label>
+
+      <input
+        type="number"
+        id="after"
+        placeholder="0"
+        inputmode="decimal">
+    </div>
+
+    <span class="sep">=</span>
+
+    <div class="field-group">
+      <label>퍼센트</label>
+
+      <input
+        type="number"
+        id="pct"
+        placeholder="0"
+        inputmode="decimal">
+    </div>
+
+  </div>
+
+  <div class="result-card">
+
+    <span class="result-label">변화율</span>
+
+    <div>
+      <div class="result-value" id="result">—</div>
+      <div class="diff" id="diff"></div>
+    </div>
+
+  </div>
+
+  <button class="reset-btn" onclick="reset()">
+    초기화
+  </button>
+
+</div>
+
+<script>
+
+  const bEl = document.getElementById('before');
+  const aEl = document.getElementById('after');
+  const pEl = document.getElementById('pct');
+
+  const rEl = document.getElementById('result');
+  const dEl = document.getElementById('diff');
+
+  function fmt(n) {
+    return n.toLocaleString('ko-KR');
+  }
+
+  function calc(changed) {
+
+    const b = parseFloat(bEl.value);
+    const a = parseFloat(aEl.value);
+    const p = parseFloat(pEl.value);
+
+    if (
+      changed !== 'pct' &&
+      !isNaN(b) &&
+      !isNaN(a) &&
+      b !== 0
+    ) {
+
+      const pctVal =
+        ((a - b) / b) * 100;
+
+      pEl.value =
+        pctVal.toFixed(2);
+
+      show(b, a, pctVal);
+
+    }
+
+    else if (
+      changed === 'pct' &&
+      !isNaN(b) &&
+      !isNaN(p)
+    ) {
+
+      const aVal =
+        b * (1 + p / 100);
+
+      aEl.value =
+        aVal.toFixed(2);
+
+      show(b, aVal, p);
+    }
+
+    else if (
+      changed === 'after' &&
+      !isNaN(a) &&
+      !isNaN(p) &&
+      p !== -100
+    ) {
+
+      const bVal =
+        a / (1 + p / 100);
+
+      bEl.value =
+        bVal.toFixed(2);
+
+      show(bVal, a, p);
+    }
+
+    else {
+
+      rEl.textContent = '—';
+
+      rEl.className =
+        'result-value';
+
+      dEl.textContent = '';
+    }
+  }
+
+  function show(b, a, p) {
+
+    const sign =
+      p > 0 ? '+' : '';
+
+    rEl.textContent =
+      sign + p.toFixed(2) + '%';
+
+    rEl.className =
+      'result-value' +
+      (
+        p > 0
+        ? ' up'
+        : p < 0
+        ? ' down'
+        : ''
+      );
+
+    const diff = a - b;
+
+    const diffSign =
+      diff > 0 ? '+' : '';
+
+    dEl.textContent =
+      diffSign +
+      fmt(Math.round(diff));
+  }
+
+  function reset() {
+
+    bEl.value = '';
+    aEl.value = '';
+    pEl.value = '';
+
+    rEl.textContent = '—';
+
+    rEl.className =
+      'result-value';
+
+    dEl.textContent = '';
+  }
+
+  bEl.addEventListener(
+    'input',
+    () => calc('before')
+  );
+
+  aEl.addEventListener(
+    'input',
+    () => calc('after')
+  );
+
+  pEl.addEventListener(
+    'input',
+    () => calc('pct')
+  );
+
+</script>
+
+</body>
+</html>
