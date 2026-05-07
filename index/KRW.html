@@ -1,6 +1,8 @@
 <html><head><link rel="stylesheet" as="style" crossorigin="" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 </head><body><div class="currency-calculator">
-  <h2 class="calc-title">환율 계산기</h2>
+  <h2 class="calc-title">
+    <a href="https://kdy173000.github.io/fireballNotion/" target="_blank" class="title-link">환율 계산기</a>
+  </h2>
 
   <!-- PC 레이아웃 -->
   <div class="calc-row pc-only">
@@ -89,7 +91,7 @@
     </div>
   </div>
 
-  <div class="rate-info" id="rateInfo">1 KRW = 0.000681 USD  ·  open.er-api.com</div>
+  <div class="rate-info" id="rateInfo">1 KRW = 0.000691 USD  ·  open.er-api.com</div>
 </div>
 <style>
 :root{
@@ -108,9 +110,6 @@
   --gap: 20px;
   --btn-w: 24px;
   --total-mid: calc(var(--btn-w) + var(--gap) * 2);
-}
-	.rate-info{
-  display: none;
 }
 @media (prefers-color-scheme: dark){
   :root{
@@ -141,6 +140,14 @@
   margin: 0 0 25px 0;
   font-size: 26px;
   font-weight: 700;
+}
+.title-link{
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+.title-link:hover{
+  cursor: pointer;
 }
 /* PC */
 .pc-only{ display: flex; }
@@ -273,10 +280,10 @@ async function fetchRates(base) {
   return null;
 }
 
-function getFrom()  { return isMobile() ? document.getElementById('fromCurrencyM') : document.getElementById('fromCurrencyPC'); }
-function getTo()    { return isMobile() ? document.getElementById('toCurrencyM')   : document.getElementById('toCurrencyPC'); }
-function getFromInput() { return isMobile() ? document.getElementById('fromAmountM') : document.getElementById('fromAmountPC'); }
-function getToInput()   { return isMobile() ? document.getElementById('toAmountM')   : document.getElementById('toAmountPC'); }
+function getFrom()      { return isMobile() ? document.getElementById('fromCurrencyM') : document.getElementById('fromCurrencyPC'); }
+function getTo()        { return isMobile() ? document.getElementById('toCurrencyM')   : document.getElementById('toCurrencyPC'); }
+function getFromInput() { return isMobile() ? document.getElementById('fromAmountM')   : document.getElementById('fromAmountPC'); }
+function getToInput()   { return isMobile() ? document.getElementById('toAmountM')     : document.getElementById('toAmountPC'); }
 
 function getRate() { return rates[getTo().value] || null; }
 
@@ -356,7 +363,6 @@ function doSwap() {
   loadRates();
 }
 
-// PC 이벤트
 document.getElementById('fromAmountPC').addEventListener('input', convertFrom);
 document.getElementById('toAmountPC').addEventListener('input', convertTo);
 document.getElementById('fromCurrencyPC').addEventListener('change', e => {
@@ -367,7 +373,6 @@ document.getElementById('toCurrencyPC').addEventListener('change', e => {
 });
 document.getElementById('swapBtnPC').addEventListener('click', doSwap);
 
-// 모바일 이벤트
 document.getElementById('fromAmountM').addEventListener('input', convertFrom);
 document.getElementById('toAmountM').addEventListener('input', convertTo);
 document.getElementById('fromCurrencyM').addEventListener('change', e => {
