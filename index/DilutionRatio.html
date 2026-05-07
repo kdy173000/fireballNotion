@@ -1,20 +1,26 @@
-<!-- Pretendard -->
-<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+<html>
+<head>
+<link rel="stylesheet" as="style" crossorigin="" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+</head>
 
+<body>
 <div class="dilution-calculator">
-  <h2 class="calc-title">희석비&nbsp;</h2>
+  <h2 class="calc-title">
+    <a href="https://kdy173000.github.io/fireballNotion/" class="title-link">희석비</a>
+  </h2>
 
   <div class="calc-body">
-    <div class="calc-input">
-
+    <div class="ratio-section">
       <label>희석비 <span class="required-star">*</span></label>
       <div class="ratio-input">
         <span>1 :</span>
         <input type="text" id="waterRatio" placeholder="10" inputmode="decimal">
       </div>
+    </div>
 
-      <div class="group-divider"></div>
+    <div class="vdivider"></div>
 
+    <div class="fields-section">
       <div class="field-col">
         <div class="field-label-row">
           <label>총 용량</label>
@@ -27,27 +33,14 @@
       </div>
 
       <div class="field-col">
-        <div class="field-label-row">
-          <label>물</label>
-          <div class="unit-inside" data-target="waterAmount">
-            <button type="button" class="unit-btn active" data-unit="ml">ml</button>
-            <button type="button" class="unit-btn" data-unit="L">L</button>
-          </div>
-        </div>
+        <label>물</label>
         <input type="text" id="waterAmount" placeholder="" inputmode="decimal">
       </div>
 
       <div class="field-col">
-        <div class="field-label-row">
-          <label>원액</label>
-          <div class="unit-inside" data-target="shampooAmount">
-            <button type="button" class="unit-btn active" data-unit="ml">ml</button>
-            <button type="button" class="unit-btn" data-unit="L">L</button>
-          </div>
-        </div>
+        <label>원액</label>
         <input type="text" id="shampooAmount" placeholder="" inputmode="decimal">
       </div>
-
     </div>
   </div>
 </div>
@@ -81,8 +74,8 @@
   font-family: var(--ui-font);
   border: 1px solid var(--calc-border);
   border-radius: 14px;
-  padding: 30px;
-  max-width: 700px;
+  padding: 20px 28px;
+  max-width: 760px;
   margin: auto;
   background: transparent;
   color: var(--text-main);
@@ -91,19 +84,52 @@
 
 .calc-title {
   text-align: center;
-  margin-bottom: 30px;
-  font-size: 26px;
+  margin: 0 0 18px;
+  font-size: 22px;
   font-weight: 700;
   color: var(--text-main);
 }
 
-.calc-body {
-  display: flex;
-  gap: 40px;
+.title-link {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
 }
 
-.calc-input {
+.title-link:hover { cursor: pointer; }
+
+.calc-body {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.ratio-section {
+  flex-shrink: 0;
+  width: 150px;
+}
+
+.vdivider {
+  width: 1px;
+  height: 64px;
+  background: var(--divider);
+  margin: 0 20px;
+  flex-shrink: 0;
+}
+
+.fields-section {
   flex: 1;
+  display: flex;
+  gap: 12px;
+}
+
+.field-col {
+  flex: 1;
+  min-width: 0;
 }
 
 label {
@@ -111,56 +137,7 @@ label {
   color: var(--text-sub);
   font-weight: 500;
   margin-bottom: 4px;
-}
-
-.ratio-input {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-
-.ratio-input span {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--text-main);
-  white-space: nowrap;
-}
-
-.required-star {
-  color: #e03131 !important;
   font-size: 14px;
-  font-weight: 700;
-  line-height: 1;
-  flex-shrink: 0;
-}
-
-input {
-  width: 100%;
-  padding: 10px;
-  margin: 0;
-  border-radius: 6px;
-  border: 1px solid var(--input-border);
-  font-size: 16px;
-  font-family: var(--ui-font);
-  background: var(--input-bg);
-  color: var(--text-main);
-  box-sizing: border-box;
-  outline: none;
-}
-
-input::placeholder {
-  color: var(--placeholder);
-}
-
-input::-webkit-inner-spin-button,
-input::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.field-col {
-  margin-bottom: 10px;
 }
 
 .field-label-row {
@@ -172,6 +149,47 @@ input::-webkit-outer-spin-button {
 
 .field-label-row label {
   margin-bottom: 0;
+}
+
+.ratio-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ratio-input span {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-main);
+  white-space: nowrap;
+}
+
+.required-star {
+  color: #e03131 !important;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+input {
+  width: 100%;
+  padding: 9px 10px;
+  margin: 0;
+  border-radius: 6px;
+  border: 1px solid var(--input-border);
+  font-size: 15px;
+  font-family: var(--ui-font);
+  background: var(--input-bg);
+  color: var(--text-main);
+  box-sizing: border-box;
+  outline: none;
+}
+
+input::placeholder { color: var(--placeholder); }
+
+input::-webkit-inner-spin-button,
+input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .unit-inside {
@@ -202,56 +220,160 @@ input::-webkit-outer-spin-button {
   font-weight: 700;
 }
 
-.group-divider {
-  width: 100%;
-  height: 1px;
-  background: var(--divider);
-  margin: 20px 0;
-}
-
-@media (max-width: 768px) {
-  .dilution-calculator {
-    padding: 17px;
-  }
-
-  .calc-title {
-    font-size: 25px;
-    margin-bottom: 18px;
-    margin-top: 0;
-  }
-
-  .calc-body {
-    flex-direction: column;
-    gap: 15px;
-  }
-
-  label {
-    font-size: 15px;
-    margin-bottom: 4px;
-  }
-
-  input {
-    padding: 8px;
-    font-size: 15px;
-  }
-
-  .ratio-input {
-    gap: 6px;
-    margin-bottom: 10px;
-  }
-
-  .ratio-input span {
-    font-size: 20px;
-  }
-
-  .unit-btn {
-    font-size: 12px;
-    padding: 0 7px;
-    height: 22px;
-  }
-
-  .group-divider {
-    margin: 20px 0 12px;
-  }
+@media (max-width: 600px) {
+  .dilution-calculator { padding: 17px; }
+  .calc-title { font-size: 22px; margin-bottom: 14px; margin-top: 0; }
+  .calc-body { flex-direction: column; align-items: stretch; gap: 0; }
+  .ratio-section { width: 100%; }
+  .vdivider { display: none; }
+  .fields-section { flex-direction: column; gap: 0; margin-top: 16px; border-top: 1px solid var(--divider); padding-top: 14px; }
+  .field-col { margin-bottom: 10px; }
+  label { font-size: 15px; }
+  input { font-size: 15px; }
 }
 </style>
+
+<script>
+const waterRatioEl    = document.getElementById("waterRatio");
+const totalAmountEl   = document.getElementById("totalAmount");
+const waterAmountEl   = document.getElementById("waterAmount");
+const shampooAmountEl = document.getElementById("shampooAmount");
+
+const units = { totalAmount: "ml", waterAmount: "ml", shampooAmount: "ml" };
+const rawMl = { totalAmount: NaN, waterAmount: NaN, shampooAmount: NaN };
+
+let isUpdating = false;
+
+function parseNumber(value) {
+  if (value == null) return NaN;
+  let s = String(value).trim();
+  if (s === "") return NaN;
+
+  if (/\d,\d/.test(s) && !/\d\.\d/.test(s)) {
+    s = s.replace(/\./g, "").replace(",", ".");
+  } else {
+    s = s.replace(/,/g, "");
+  }
+
+  return parseFloat(s);
+}
+
+function formatNumber(value) {
+  if (!isFinite(value)) return "";
+  const rounded = Math.round(value * 100) / 100;
+  return rounded.toLocaleString("ko-KR", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2
+  });
+}
+
+function toMl(fieldId, value) {
+  if (!isFinite(value)) return NaN;
+  return units[fieldId] === "L" ? value * 1000 : value;
+}
+
+function fromMl(fieldId, ml) {
+  if (!isFinite(ml)) return NaN;
+  return units[fieldId] === "L" ? ml / 1000 : ml;
+}
+
+function setField(el, fieldId, ml) {
+  rawMl[fieldId] = ml;
+  el.value = isFinite(ml) ? formatNumber(fromMl(fieldId, ml)) : "";
+}
+
+function clearField(el, fieldId) {
+  rawMl[fieldId] = NaN;
+  el.value = "";
+}
+
+function getRatio() {
+  const r = parseNumber(waterRatioEl.value);
+  return isFinite(r) && r >= 0 ? r : NaN;
+}
+
+function recalcFrom(source) {
+  const ratio = getRatio();
+  if (isNaN(ratio)) return;
+
+  const ml = rawMl[source];
+  if (!isFinite(ml) || ml < 0) return;
+
+  let totalMl, waterMl, shampooMl;
+
+  if (source === "totalAmount") {
+    totalMl = ml;
+    shampooMl = totalMl / (1 + ratio);
+    waterMl = totalMl - shampooMl;
+  } else if (source === "waterAmount") {
+    waterMl = ml;
+    shampooMl = ratio > 0 ? waterMl / ratio : 0;
+    totalMl = shampooMl + waterMl;
+  } else {
+    shampooMl = ml;
+    waterMl = shampooMl * ratio;
+    totalMl = shampooMl + waterMl;
+  }
+
+  isUpdating = true;
+
+  if (source !== "totalAmount") setField(totalAmountEl, "totalAmount", totalMl);
+  if (source !== "waterAmount") setField(waterAmountEl, "waterAmount", waterMl);
+  if (source !== "shampooAmount") setField(shampooAmountEl, "shampooAmount", shampooMl);
+
+  isUpdating = false;
+}
+
+waterRatioEl.addEventListener("input", () => {
+  if (isUpdating) return;
+
+  const source = ["totalAmount", "waterAmount", "shampooAmount"].find(id => isFinite(rawMl[id]));
+  if (source) recalcFrom(source);
+});
+
+function handleFieldInput(el, fieldId) {
+  el.addEventListener("input", () => {
+    if (isUpdating) return;
+
+    const ml = toMl(fieldId, parseNumber(el.value));
+    rawMl[fieldId] = ml;
+
+    if (isFinite(ml) && ml >= 0) {
+      recalcFrom(fieldId);
+    } else {
+      isUpdating = true;
+      ["totalAmount", "waterAmount", "shampooAmount"]
+        .filter(id => id !== fieldId)
+        .forEach(id => clearField(document.getElementById(id), id));
+      isUpdating = false;
+    }
+  });
+}
+
+handleFieldInput(totalAmountEl, "totalAmount");
+handleFieldInput(waterAmountEl, "waterAmount");
+handleFieldInput(shampooAmountEl, "shampooAmount");
+
+document.querySelectorAll(".unit-inside").forEach(toggle => {
+  const targetId = toggle.dataset.target;
+  const inputEl = document.getElementById(targetId);
+
+  toggle.querySelectorAll(".unit-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const newUnit = btn.dataset.unit;
+      if (newUnit === units[targetId]) return;
+
+      units[targetId] = newUnit;
+
+      toggle.querySelectorAll(".unit-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      if (isFinite(rawMl[targetId])) {
+        inputEl.value = formatNumber(fromMl(targetId, rawMl[targetId]));
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>
