@@ -10,7 +10,9 @@
 
 <div class="stock-calculator">
   <div class="calc-header">
-    <h2 class="calc-title">재고 계산기</h2>
+    <h2 class="calc-title">
+      <a href="https://kdy173000.github.io/fireballNotion/" target="_blank" class="title-link">재고 계산기</a>
+    </h2>
   </div>
 
   <div class="calc-input">
@@ -36,7 +38,7 @@
       <!-- 세로 구분선 (PC만) -->
       <div class="vertical-divider"></div>
 
-      <!-- 결과 -->
+      <!-- 결과 (PC만) -->
       <div class="result-field">
         <label>결과</label>
         <div class="result-wrapper">
@@ -133,6 +135,13 @@ body {
   color: var(--text-main);
 }
 
+/* 숨겨진 링크 - 겉으론 그냥 제목처럼 보임 */
+.title-link {
+  color: inherit;
+  text-decoration: none;
+  cursor: default;
+}
+
 label {
   display: block;
   margin-bottom: 3px;
@@ -175,9 +184,7 @@ input:focus { outline: none; border-color: #888; }
 }
 
 /* ── 모바일 기본 ── */
-.main-row {
-  display: contents; /* 모바일에선 구조만, 실제 레이아웃 없음 */
-}
+.main-row { display: contents; }
 
 .fields-row {
   display: flex;
@@ -188,8 +195,7 @@ input:focus { outline: none; border-color: #888; }
 .field input { margin-bottom: 0; }
 
 .vertical-divider { display: none; }
-
-.result-field { display: none; } /* PC에서만 보임 */
+.result-field { display: none; }
 
 .group-divider {
   height: 1px;
@@ -197,7 +203,7 @@ input:focus { outline: none; border-color: #888; }
   margin: 12px 0;
 }
 
-.result-field-mobile { display: block; } /* 모바일에서만 보임 */
+.result-field-mobile { display: block; }
 
 /* ── PC (600px+) ── */
 @media (min-width: 600px) {
@@ -233,13 +239,9 @@ input:focus { outline: none; border-color: #888; }
 }
 
 /* 결과 공통 */
-.result-wrapper {
-  position: relative;
-}
+.result-wrapper { position: relative; }
 
-.result-wrapper input {
-  padding-left: 56px;
-}
+.result-wrapper input { padding-left: 56px; }
 
 .badge {
   position: absolute;
@@ -254,9 +256,9 @@ input:focus { outline: none; border-color: #888; }
   white-space: nowrap;
 }
 
-.badge.in  { background: rgba(34,139,230,0.12); color: var(--blue); display: inline-block; }
-.badge.out { background: rgba(224,49,49,0.12);  color: var(--red);  display: inline-block; }
-.badge.zero{ background: rgba(134,142,150,0.12);color: var(--gray); display: inline-block; }
+.badge.in   { background: rgba(34,139,230,0.12); color: var(--blue); display: inline-block; }
+.badge.out  { background: rgba(224,49,49,0.12);  color: var(--red);  display: inline-block; }
+.badge.zero { background: rgba(134,142,150,0.12);color: var(--gray); display: inline-block; }
 </style>
 
 <script>
@@ -264,11 +266,8 @@ const actualEl  = document.getElementById("actualStock");
 const systemEl  = document.getElementById("systemStock");
 const plannedEl = document.getElementById("plannedOut");
 
-// PC 결과
 const resultEl  = document.getElementById("resultStock");
 const badgeEl   = document.getElementById("resultBadge");
-
-// 모바일 결과
 const resultElM = document.getElementById("resultStockMobile");
 const badgeElM  = document.getElementById("resultBadgeMobile");
 
