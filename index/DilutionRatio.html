@@ -15,31 +15,37 @@
 
       <div class="group-divider"></div>
 
-      <label>총 용량</label>
-      <div class="unit-input">
+      <div class="field-col">
+        <div class="field-label-row">
+          <label>총 용량</label>
+          <div class="unit-inside" data-target="totalAmount">
+            <button type="button" class="unit-btn active" data-unit="ml">ml</button>
+            <button type="button" class="unit-btn" data-unit="L">L</button>
+          </div>
+        </div>
         <input type="text" id="totalAmount" placeholder="" inputmode="decimal">
-        <div class="unit-inside" data-target="totalAmount">
-          <button type="button" class="unit-btn active" data-unit="ml">ml</button>
-          <button type="button" class="unit-btn" data-unit="L">L</button>
-        </div>
       </div>
 
-      <label>물</label>
-      <div class="unit-input">
+      <div class="field-col">
+        <div class="field-label-row">
+          <label>물</label>
+          <div class="unit-inside" data-target="waterAmount">
+            <button type="button" class="unit-btn active" data-unit="ml">ml</button>
+            <button type="button" class="unit-btn" data-unit="L">L</button>
+          </div>
+        </div>
         <input type="text" id="waterAmount" placeholder="" inputmode="decimal">
-        <div class="unit-inside" data-target="waterAmount">
-          <button type="button" class="unit-btn active" data-unit="ml">ml</button>
-          <button type="button" class="unit-btn" data-unit="L">L</button>
-        </div>
       </div>
 
-      <label>원액</label>
-      <div class="unit-input">
-        <input type="text" id="shampooAmount" placeholder="" inputmode="decimal">
-        <div class="unit-inside" data-target="shampooAmount">
-          <button type="button" class="unit-btn active" data-unit="ml">ml</button>
-          <button type="button" class="unit-btn" data-unit="L">L</button>
+      <div class="field-col">
+        <div class="field-label-row">
+          <label>원액</label>
+          <div class="unit-inside" data-target="shampooAmount">
+            <button type="button" class="unit-btn active" data-unit="ml">ml</button>
+            <button type="button" class="unit-btn" data-unit="L">L</button>
+          </div>
         </div>
+        <input type="text" id="shampooAmount" placeholder="" inputmode="decimal">
       </div>
 
     </div>
@@ -153,23 +159,24 @@ input::-webkit-outer-spin-button {
   margin: 0;
 }
 
-.unit-input {
-  position: relative;
+.field-col {
   margin-bottom: 10px;
 }
 
-.unit-input input {
-  padding-right: 86px;
+.field-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.field-label-row label {
+  margin-bottom: 0;
 }
 
 .unit-inside {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
   display: inline-flex;
   align-items: center;
-  background: transparent;
 }
 
 .unit-btn {
@@ -178,10 +185,10 @@ input::-webkit-outer-spin-button {
   background: transparent;
   color: var(--text-sub);
   font-family: var(--ui-font);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
-  padding: 0 8px;
-  height: 24px;
+  padding: 0 7px;
+  height: 22px;
   cursor: pointer;
   line-height: 1;
 }
@@ -237,10 +244,6 @@ input::-webkit-outer-spin-button {
     font-size: 20px;
   }
 
-  .unit-input input {
-    padding-right: 76px;
-  }
-
   .unit-btn {
     font-size: 12px;
     padding: 0 7px;
@@ -252,143 +255,3 @@ input::-webkit-outer-spin-button {
   }
 }
 </style>
-
-<script>
-const waterRatioEl    = document.getElementById("waterRatio");
-const totalAmountEl   = document.getElementById("totalAmount");
-const waterAmountEl   = document.getElementById("waterAmount");
-const shampooAmountEl = document.getElementById("shampooAmount");
-
-const units = { totalAmount: "ml", waterAmount: "ml", shampooAmount: "ml" };
-
-// ml 기준 원본값 보관 - 단위 전환 시 오차 누적 없음
-const rawMl = { totalAmount: NaN, waterAmount: NaN, shampooAmount: NaN };
-
-let isUpdating = false;
-
-function parseNumber(value) {
-  if (value == null) return NaN;
-  let s = String(value).trim();
-  if (s === "") return NaN;
-  if (/\d,\d/.test(s) && !/\d\.\d/.test(s)) {
-    s = s.replace(/\./g, "").replace(",", ".");
-  } else {
-    s = s.replace(/,/g, "");
-  }
-  return parseFloat(s);
-}
-
-function formatNumber(value) {
-  if (!isFinite(value)) return "";
-  const rounded = Math.round(value * 100) / 100;
-  return rounded.toLocaleString("ko-KR", { minimumFractionDigits: 0, maximumFractionDigits: 2 });
-}
-
-function toMl(fieldId, value) {
-  if (!isFinite(value)) return NaN;
-  return units[fieldId] === "L" ? value * 1000 : value;
-}
-
-function fromMl(fieldId, ml) {
-  if (!isFinite(ml)) return NaN;
-  return units[fieldId] === "L" ? ml / 1000 : ml;
-}
-
-function setField(el, fieldId, ml) {
-  rawMl[fieldId] = ml;
-  el.value = isFinite(ml) ? formatNumber(fromMl(fieldId, ml)) : "";
-}
-
-function clearField(el, fieldId) {
-  rawMl[fieldId] = NaN;
-  el.value = "";
-}
-
-function getRatio() {
-  const r = parseNumber(waterRatioEl.value);
-  return isFinite(r) && r >= 0 ? r : NaN;
-}
-
-// source 필드 + 희석비를 기준으로 나머지 두 필드 계산
-function recalcFrom(source) {
-  const ratio = getRatio();
-  if (isNaN(ratio)) return;
-
-  const ml = rawMl[source];
-  if (!isFinite(ml) || ml < 0) return;
-
-  let totalMl, waterMl, shampooMl;
-
-  if (source === "totalAmount") {
-    totalMl   = ml;
-    shampooMl = totalMl / (1 + ratio);
-    waterMl   = totalMl - shampooMl;
-  } else if (source === "waterAmount") {
-    waterMl   = ml;
-    shampooMl = ratio > 0 ? waterMl / ratio : 0;
-    totalMl   = shampooMl + waterMl;
-  } else {
-    shampooMl = ml;
-    waterMl   = shampooMl * ratio;
-    totalMl   = shampooMl + waterMl;
-  }
-
-  isUpdating = true;
-  if (source !== "totalAmount")   setField(totalAmountEl,   "totalAmount",   totalMl);
-  if (source !== "waterAmount")   setField(waterAmountEl,   "waterAmount",   waterMl);
-  if (source !== "shampooAmount") setField(shampooAmountEl, "shampooAmount", shampooMl);
-  isUpdating = false;
-}
-
-// 희석비 변경 - 값이 있는 첫 번째 필드 기준으로 재계산
-waterRatioEl.addEventListener("input", () => {
-  if (isUpdating) return;
-  const source = ["totalAmount", "waterAmount", "shampooAmount"].find(id => isFinite(rawMl[id]));
-  if (source) recalcFrom(source);
-});
-
-// 3개 필드 공통 입력 핸들러
-function handleFieldInput(el, fieldId) {
-  el.addEventListener("input", () => {
-    if (isUpdating) return;
-    const ml = toMl(fieldId, parseNumber(el.value));
-    rawMl[fieldId] = ml;
-    if (isFinite(ml) && ml >= 0) {
-      recalcFrom(fieldId);
-    } else {
-      // 값을 지우면 나머지 두 필드도 초기화
-      isUpdating = true;
-      ["totalAmount", "waterAmount", "shampooAmount"]
-        .filter(id => id !== fieldId)
-        .forEach(id => clearField(document.getElementById(id), id));
-      isUpdating = false;
-    }
-  });
-}
-
-handleFieldInput(totalAmountEl,   "totalAmount");
-handleFieldInput(waterAmountEl,   "waterAmount");
-handleFieldInput(shampooAmountEl, "shampooAmount");
-
-// 단위 버튼
-document.querySelectorAll(".unit-inside").forEach(toggle => {
-  const targetId = toggle.dataset.target;
-  const inputEl  = document.getElementById(targetId);
-
-  toggle.querySelectorAll(".unit-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const newUnit = btn.dataset.unit;
-      if (newUnit === units[targetId]) return;
-
-      units[targetId] = newUnit;
-      toggle.querySelectorAll(".unit-btn").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-
-      // rawMl 원본에서 표시만 변환 - 오차 누적 없음
-      if (isFinite(rawMl[targetId])) {
-        inputEl.value = formatNumber(fromMl(targetId, rawMl[targetId]));
-      }
-    });
-  });
-});
-</script>
