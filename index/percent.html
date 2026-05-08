@@ -1,408 +1,278 @@
-<html>
-<head>
-<style>
+<html lang="ko">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Percent Calculator</title>
 
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-
-  /* =========================
-     LIGHT MODE (기본)
-  ========================= */
-
-  :root {
-    --color-background-primary: #ffffff;
-    --color-background-secondary: #f5f5f5;
-
-    --color-text-primary: #111111;
-    --color-text-secondary: #666666;
-    --color-text-tertiary: #999999;
-
-    --color-border-primary: #111111;
-    --color-border-secondary: #dcdcdc;
-    --color-border-tertiary: #e5e5e5;
-
-    --border-radius-md: 10px;
-    --border-radius-lg: 16px;
-
-    --font-sans: -apple-system,
-      BlinkMacSystemFont,
-      "Segoe UI",
-      sans-serif;
-  }
-
-  /* =========================
-     DARK MODE (자동 적용)
-  ========================= */
-
-  @media (prefers-color-scheme: dark) {
-
+  <style>
     :root {
+      color-scheme: light dark;
 
-      --color-background-primary: #121212;
-      --color-background-secondary: #1e1e1e;
+      --bg: transparent;
+      --text-main: #111111;
+      --text-sub: #666666;
+      --text-muted: #888888;
 
-      --color-text-primary: #f3f3f3;
-      --color-text-secondary: #b5b5b5;
-      --color-text-tertiary: #8c8c8c;
+      --card-bg: rgba(0, 0, 0, 0.04);
+      --card-border: rgba(0, 0, 0, 0.08);
+      --card-hover: rgba(0, 0, 0, 0.06);
 
-      --color-border-primary: #8a8a8a;
-      --color-border-secondary: #333333;
-      --color-border-tertiary: #2a2a2a;
+      --input-bg: rgba(255, 255, 255, 0.55);
+      --input-border: rgba(0, 0, 0, 0.12);
+      --hover-border: #ff3b3b;
+
     }
-  }
 
-  body {
-    font-family: var(--font-sans);
-    background: var(--color-background-primary);
-    color: var(--color-text-primary);
-    transition:
-      background 0.25s ease,
-      color 0.25s ease;
-  }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: transparent;
+        --text-main: #ffffff;
+        --text-sub: #aaaaaa;
+        --text-muted: #777777;
 
-  .wrap {
-    padding: 2rem 1rem;
-    max-width: 480px;
-    margin: 0 auto;
-  }
+        --card-bg: rgba(255, 255, 255, 0.05);
+        --card-border: rgba(255, 255, 255, 0.08);
+        --card-hover: rgba(255, 255, 255, 0.08);
 
-  .title {
-    font-size: 13px;
-    color: var(--color-text-secondary);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin-bottom: 2rem;
-  }
+        --input-bg: rgba(255, 255, 255, 0.04);
+        --input-border: rgba(255, 255, 255, 0.12);
+      }
+    }
 
-  .fields {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 1.5rem;
-    flex-wrap: wrap;
-  }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
 
-  .field-group {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    flex: 1;
-    min-width: 90px;
-  }
+    body {
+      min-height: 100dvh;
+      background: var(--bg);
+      color: var(--text-main);
 
-  .field-group label {
-    font-size: 12px;
-    color: var(--color-text-secondary);
-  }
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
 
-  .field-group input {
-    width: 100%;
-    padding: 10px 12px;
-    font-size: 16px;
-    font-weight: 500;
+      padding: 30px;
+    }
 
-    border: 0.5px solid var(--color-border-secondary);
-    border-radius: var(--border-radius-md);
+    .wrap {
+      width: 100%;
+      max-width: 520px;
+      text-align: center;
+    }
 
-    background: var(--color-background-primary);
-    color: var(--color-text-primary);
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
 
-    text-align: center;
-    outline: none;
+    .title {
+      margin-bottom: 10px;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
 
-    transition:
-      border-color 0.15s,
-      background 0.25s,
-      color 0.25s;
-  }
+    .subtitle {
+      margin-bottom: 34px;
+      color: var(--text-sub);
+      font-size: 14px;
+    }
 
-  .field-group input:focus {
-    border-color: var(--color-border-primary);
-  }
+    .calculator {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 28px;
+      backdrop-filter: blur(6px);
+    }
 
-  .sep {
-    font-size: 18px;
-    color: var(--color-text-tertiary);
-    padding-top: 20px;
-    flex-shrink: 0;
-  }
+    .fields {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      align-items: end;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
 
-  .result-card {
+    .field-group.percent-field {
+      grid-column: auto;
+    }
 
-    background: var(--color-background-secondary);
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 0;
+    }
 
-    border-radius: var(--border-radius-lg);
+    .field-group label {
+      font-size: 12px;
+      color: var(--text-sub);
+    }
 
-    padding: 1.25rem 1.5rem;
+    .field-group input {
+      width: 100%;
+      height: 44px;
+      padding: 10px 12px;
+      border: 1px solid var(--input-border);
+      border-radius: 14px;
+      background: var(--input-bg);
+      color: var(--text-main);
+      font-size: 16px;
+      font-weight: 600;
+      text-align: center;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
 
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    .field-group input[type="number"] {
+      appearance: textfield;
+      -moz-appearance: textfield;
+    }
 
-    transition: background 0.25s;
-  }
+    .field-group input[type="number"]::-webkit-outer-spin-button,
+    .field-group input[type="number"]::-webkit-inner-spin-button {
+      margin: 0;
+      -webkit-appearance: none;
+    }
 
-  .result-label {
-    font-size: 13px;
-    color: var(--color-text-secondary);
-  }
+    .field-group input:focus {
+      border-color: var(--hover-border);
+      background: var(--card-hover);
+    }
 
-  .result-value {
-    font-size: 28px;
-    font-weight: 600;
-    color: var(--color-text-primary);
+    @media (max-width: 600px) {
+      body {
+        padding: 20px 16px;
+      }
 
-    transition: color 0.25s;
-  }
+      .title {
+        font-size: 24px;
+        margin-bottom: 6px;
+      }
 
-  .result-value.up {
-    color: #1D9E75;
-  }
+      .subtitle {
+        font-size: 13px;
+        margin-bottom: 20px;
+      }
 
-  .result-value.down {
-    color: #D85A30;
-  }
+      .calculator {
+        padding: 18px;
+        border-radius: 14px;
+      }
 
-  .diff {
-    font-size: 12px;
-    color: var(--color-text-tertiary);
-    margin-top: 4px;
-    text-align: right;
-  }
+      .fields {
+        grid-template-columns: 1fr;
+        row-gap: 10px;
+        margin-bottom: 16px;
+      }
 
-  .reset-btn {
+      .field-group input {
+        height: 42px;
+        border-radius: 12px;
+        font-size: 15px;
+      }
 
-    margin-top: 1.25rem;
+      .field-group {
+        display: grid;
+        grid-template-columns: 54px 1fr;
+        align-items: center;
+        gap: 4px;
+      }
 
-    width: 100%;
-    padding: 9px;
+      .field-group.percent-field {
+        grid-column: 1 / -1;
+        grid-template-columns: 54px 1fr;
+      }
 
-    font-size: 13px;
+      .field-group label {
+        text-align: center;
+        font-size: 12px;
+        white-space: nowrap;
+      }
 
-    color: var(--color-text-secondary);
-
-    background: transparent;
-
-    border: 0.5px solid var(--color-border-tertiary);
-
-    border-radius: var(--border-radius-md);
-
-    cursor: pointer;
-
-    transition:
-      background 0.2s,
-      border-color 0.2s;
-  }
-
-  .reset-btn:hover {
-    background: var(--color-background-secondary);
-  }
-
-</style>
+    }
+  </style>
 </head>
 
 <body>
+  <main class="wrap">
+    <h1 class="title">Percent</h1>
+    <p class="subtitle">전후 값으로 변화율을 계산하세요</p>
 
-<div class="wrap">
+    <section class="calculator" aria-labelledby="calculator-title">
+      <h2 class="sr-only" id="calculator-title">퍼센트 변화율 계산기</h2>
 
-  <h2 class="sr-only">퍼센트 변화율 계산기</h2>
+      <div class="fields">
+        <div class="field-group">
+          <label for="before">전</label>
+          <input type="number" id="before" placeholder="0" inputmode="decimal">
+        </div>
 
-  <p class="title">% calculator</p>
+        <div class="field-group">
+          <label for="after">후</label>
+          <input type="number" id="after" placeholder="0" inputmode="decimal">
+        </div>
 
-  <div class="fields">
+        <div class="field-group percent-field">
+          <label for="pct">변화율</label>
+          <input type="number" id="pct" placeholder="0" inputmode="decimal">
+        </div>
+      </div>
+    </section>
+  </main>
 
-    <div class="field-group">
-      <label>전</label>
+  <script>
+    const bEl = document.getElementById('before');
+    const aEl = document.getElementById('after');
+    const pEl = document.getElementById('pct');
 
-      <input
-        type="number"
-        id="before"
-        placeholder="0"
-        inputmode="decimal">
-    </div>
-
-    <span class="sep">→</span>
-
-    <div class="field-group">
-      <label>후</label>
-
-      <input
-        type="number"
-        id="after"
-        placeholder="0"
-        inputmode="decimal">
-    </div>
-
-    <span class="sep">=</span>
-
-    <div class="field-group">
-      <label>퍼센트</label>
-
-      <input
-        type="number"
-        id="pct"
-        placeholder="0"
-        inputmode="decimal">
-    </div>
-
-  </div>
-
-  <div class="result-card">
-
-    <span class="result-label">변화율</span>
-
-    <div>
-      <div class="result-value" id="result">—</div>
-      <div class="diff" id="diff"></div>
-    </div>
-
-  </div>
-
-  <button class="reset-btn" onclick="reset()">
-    초기화
-  </button>
-
-</div>
-
-<script>
-
-  const bEl = document.getElementById('before');
-  const aEl = document.getElementById('after');
-  const pEl = document.getElementById('pct');
-
-  const rEl = document.getElementById('result');
-  const dEl = document.getElementById('diff');
-
-  function fmt(n) {
-    return n.toLocaleString('ko-KR');
-  }
-
-  function calc(changed) {
-
-    const b = parseFloat(bEl.value);
-    const a = parseFloat(aEl.value);
-    const p = parseFloat(pEl.value);
-
-    if (
-      changed !== 'pct' &&
-      !isNaN(b) &&
-      !isNaN(a) &&
-      b !== 0
-    ) {
-
-      const pctVal =
-        ((a - b) / b) * 100;
-
-      pEl.value =
-        pctVal.toFixed(2);
-
-      show(b, a, pctVal);
-
+    function numberFrom(el) {
+      return parseFloat(el.value);
     }
 
-    else if (
-      changed === 'pct' &&
-      !isNaN(b) &&
-      !isNaN(p)
-    ) {
-
-      const aVal =
-        b * (1 + p / 100);
-
-      aEl.value =
-        aVal.toFixed(2);
-
-      show(b, aVal, p);
+    function setNumber(el, value) {
+      el.value = Number.isInteger(value) ? String(value) : value.toFixed(2);
     }
 
-    else if (
-      changed === 'after' &&
-      !isNaN(a) &&
-      !isNaN(p) &&
-      p !== -100
-    ) {
+    function calc(changed) {
+      const before = numberFrom(bEl);
+      const after = numberFrom(aEl);
+      const percent = numberFrom(pEl);
 
-      const bVal =
-        a / (1 + p / 100);
+      if (changed === 'pct' && !isNaN(before) && !isNaN(percent)) {
+        const nextAfter = before * (1 + percent / 100);
+        setNumber(aEl, nextAfter);
+        return;
+      }
 
-      bEl.value =
-        bVal.toFixed(2);
+      if (changed === 'after' && isNaN(before) && !isNaN(after) && !isNaN(percent) && percent !== -100) {
+        const nextBefore = after / (1 + percent / 100);
+        setNumber(bEl, nextBefore);
+        return;
+      }
 
-      show(bVal, a, p);
+      if (!isNaN(before) && !isNaN(after) && before !== 0) {
+        const nextPercent = ((after - before) / before) * 100;
+        setNumber(pEl, nextPercent);
+        return;
+      }
     }
 
-    else {
-
-      rEl.textContent = '—';
-
-      rEl.className =
-        'result-value';
-
-      dEl.textContent = '';
-    }
-  }
-
-  function show(b, a, p) {
-
-    const sign =
-      p > 0 ? '+' : '';
-
-    rEl.textContent =
-      sign + p.toFixed(2) + '%';
-
-    rEl.className =
-      'result-value' +
-      (
-        p > 0
-        ? ' up'
-        : p < 0
-        ? ' down'
-        : ''
-      );
-
-    const diff = a - b;
-
-    const diffSign =
-      diff > 0 ? '+' : '';
-
-    dEl.textContent =
-      diffSign +
-      fmt(Math.round(diff));
-  }
-
-  function reset() {
-
-    bEl.value = '';
-    aEl.value = '';
-    pEl.value = '';
-
-    rEl.textContent = '—';
-
-    rEl.className =
-      'result-value';
-
-    dEl.textContent = '';
-  }
-
-  bEl.addEventListener(
-    'input',
-    () => calc('before')
-  );
-
-  aEl.addEventListener(
-    'input',
-    () => calc('after')
-  );
-
-  pEl.addEventListener(
-    'input',
-    () => calc('pct')
-  );
-
-</script>
-
+    bEl.addEventListener('input', () => calc('before'));
+    aEl.addEventListener('input', () => calc('after'));
+    pEl.addEventListener('input', () => calc('pct'));
+  </script>
 </body>
 </html>
