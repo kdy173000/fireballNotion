@@ -1,5 +1,4 @@
-<html lang="ko">
- <head>
+<html lang="ko"><head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Percent Calculator</title>
@@ -81,6 +80,12 @@
       font-size: 32px;
       font-weight: 700;
       color: var(--text-main);
+    }
+
+    .title-link {
+      color: inherit;
+      text-decoration: none;
+      cursor: pointer;
     }
 
     .subtitle {
@@ -208,7 +213,9 @@
 
 <body>
   <main class="wrap">
-    <h1 class="title">Percent</h1>
+    <h1 class="title">
+      <a href="https://kdy173000.github.io/fireballNotion/" class="title-link">Percent</a>
+    </h1>
     <p class="subtitle">전후 값으로 변화율을 계산하세요</p>
 
     <section class="calculator" aria-labelledby="calculator-title">
@@ -274,5 +281,6 @@
     aEl.addEventListener('input', () => calc('after'));
     pEl.addEventListener('input', () => calc('pct'));
   </script>
-</body>
-</html>
+
+
+</body></html>
