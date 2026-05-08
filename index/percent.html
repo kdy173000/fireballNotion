@@ -1,283 +1,191 @@
 <html lang="ko"><head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Percent Calculator</title>
-
-  <style>
-    :root {
-      color-scheme: light dark;
-
-      --bg: transparent;
-      --text-main: #111111;
-      --text-sub: #666666;
-      --text-muted: #888888;
-
-      --card-bg: rgba(0, 0, 0, 0.04);
-      --card-border: rgba(0, 0, 0, 0.08);
-      --card-hover: rgba(0, 0, 0, 0.06);
-
-      --input-bg: rgba(255, 255, 255, 0.55);
-      --input-border: rgba(0, 0, 0, 0.12);
-      --hover-border: #ff3b3b;
-
-    }
-
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: transparent;
-        --text-main: #ffffff;
-        --text-sub: #aaaaaa;
-        --text-muted: #777777;
-
-        --card-bg: rgba(255, 255, 255, 0.05);
-        --card-border: rgba(255, 255, 255, 0.08);
-        --card-hover: rgba(255, 255, 255, 0.08);
-
-        --input-bg: rgba(255, 255, 255, 0.04);
-        --input-border: rgba(255, 255, 255, 0.12);
-      }
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
-
-    body {
-      background: var(--bg);
-      color: var(--text-main);
-
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-
-      padding: 30px;
-    }
-
-    .wrap {
-      width: 100%;
-      max-width: 520px;
-      text-align: center;
-    }
-
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
-    }
-
-    .title {
-      margin-bottom: 10px;
-      font-size: 32px;
-      font-weight: 700;
-      color: var(--text-main);
-    }
-
-    .title-link {
-      color: inherit;
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    .subtitle {
-      margin-bottom: 34px;
-      color: var(--text-sub);
-      font-size: 14px;
-    }
-
-    .calculator {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 18px;
-      padding: 28px;
-      backdrop-filter: blur(6px);
-    }
-
-    .fields {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      align-items: end;
-      gap: 12px;
-    }
-
-    .field-group.percent-field {
-      grid-column: auto;
-    }
-
-    .field-group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      min-width: 0;
-    }
-
-    .field-group label {
-      font-size: 12px;
-      color: var(--text-sub);
-    }
-
-    .field-group input {
-      width: 100%;
-      height: 44px;
-      padding: 10px 12px;
-      border: 1px solid var(--input-border);
-      border-radius: 14px;
-      background: var(--input-bg);
-      color: var(--text-main);
-      font-size: 16px;
-      font-weight: 600;
-      text-align: center;
-      outline: none;
-      transition: border-color 0.2s, background 0.2s;
-    }
-
-    .field-group input[type="number"] {
-      appearance: textfield;
-      -moz-appearance: textfield;
-    }
-
-    .field-group input[type="number"]::-webkit-outer-spin-button,
-    .field-group input[type="number"]::-webkit-inner-spin-button {
-      margin: 0;
-      -webkit-appearance: none;
-    }
-
-    .field-group input:focus {
-      border-color: var(--hover-border);
-      background: var(--card-hover);
-    }
-
-    @media (max-width: 600px) {
-      body {
-        padding: 20px 16px;
-      }
-
-      .title {
-        font-size: 24px;
-        margin-bottom: 6px;
-      }
-
-      .subtitle {
-        font-size: 13px;
-        margin-bottom: 20px;
-      }
-
-      .calculator {
-        padding: 18px;
-        border-radius: 14px;
-      }
-
-      .fields {
-        grid-template-columns: 1fr;
-        row-gap: 10px;
-      }
-
-      .field-group input {
-        height: 42px;
-        border-radius: 12px;
-        font-size: 15px;
-      }
-
-      .field-group {
-        display: grid;
-        grid-template-columns: 54px 1fr;
-        align-items: center;
-        gap: 4px;
-      }
-
-      .field-group.percent-field {
-        grid-column: 1 / -1;
-        grid-template-columns: 54px 1fr;
-      }
-
-      .field-group label {
-        text-align: center;
-        font-size: 12px;
-        white-space: nowrap;
-      }
-
-    }
-  </style>
+  <title>변화율 계산기</title>
+  <link rel="stylesheet" as="style" crossorigin="" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 </head>
-
 <body>
-  <main class="wrap">
-    <h1 class="title">
+
+<div class="percent-calculator">
+  <div class="calc-header">
+    <h2 class="calc-title">
       <a href="https://kdy173000.github.io/fireballNotion/" class="title-link">Percent</a>
-    </h1>
-    <p class="subtitle">전후 값으로 변화율을 계산하세요</p>
+    </h2>
+  </div>
 
-    <section class="calculator" aria-labelledby="calculator-title">
-      <h2 class="sr-only" id="calculator-title">퍼센트 변화율 계산기</h2>
+  <div class="fields-row">
+    <div class="field">
+      <label for="before">전</label>
+      <input type="text" id="before" class="transparent-input" placeholder="0" inputmode="decimal">
+    </div>
 
-      <div class="fields">
-        <div class="field-group">
-          <label for="before">전</label>
-          <input type="number" id="before" placeholder="0" inputmode="decimal">
-        </div>
+    <div class="field">
+      <label for="after">후</label>
+      <input type="text" id="after" class="transparent-input" placeholder="0" inputmode="decimal">
+    </div>
 
-        <div class="field-group">
-          <label for="after">후</label>
-          <input type="number" id="after" placeholder="0" inputmode="decimal">
-        </div>
+    <div class="field">
+      <label for="pct">변화율</label>
+      <input type="text" id="pct" class="transparent-input" placeholder="0" inputmode="decimal">
+    </div>
+  </div>
+</div>
 
-        <div class="field-group percent-field">
-          <label for="pct">변화율</label>
-          <input type="number" id="pct" placeholder="0" inputmode="decimal">
-        </div>
-      </div>
-    </section>
-  </main>
+<style>
+:root {
+  color-scheme: light dark;
+  --ui-font: "Pretendard", sans-serif;
+  --bg-page: transparent;
+  --bg-card: transparent;
+  --calc-border: #d9d9d9;
+  --text-main: #111;
+  --text-sub: #444;
+  --input-bg: #ffffff;
+  --input-border: #cfcfcf;
+  --placeholder: #9a9a9a;
+}
 
-  <script>
-    const bEl = document.getElementById('before');
-    const aEl = document.getElementById('after');
-    const pEl = document.getElementById('pct');
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-page: transparent;
+    --bg-card: transparent;
+    --calc-border: #3a3a3a;
+    --text-main: #f0f0f0;
+    --text-sub: #aaaaaa;
+    --input-bg: #2e2e2e;
+    --input-border: #444444;
+    --placeholder: #666666;
+  }
+}
 
-    function numberFrom(el) {
-      return parseFloat(el.value);
-    }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-    function setNumber(el, value) {
-      el.value = Number.isInteger(value) ? String(value) : value.toFixed(2);
-    }
+body {
+  font-family: var(--ui-font);
+  background: var(--bg-page);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
+}
 
-    function calc(changed) {
-      const before = numberFrom(bEl);
-      const after = numberFrom(aEl);
-      const percent = numberFrom(pEl);
+.percent-calculator {
+  font-family: var(--ui-font);
+  background: var(--bg-card);
+  border: 1px solid var(--calc-border);
+  border-radius: 14px;
+  padding: 20px 24px 24px;
+  width: 100%;
+  max-width: 800px;
+}
 
-      if (changed === 'pct' && !isNaN(before) && !isNaN(percent)) {
-        const nextAfter = before * (1 + percent / 100);
-        setNumber(aEl, nextAfter);
-        return;
-      }
+.calc-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+}
 
-      if (changed === 'after' && isNaN(before) && !isNaN(after) && !isNaN(percent) && percent !== -100) {
-        const nextBefore = after / (1 + percent / 100);
-        setNumber(bEl, nextBefore);
-        return;
-      }
+.calc-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-main);
+}
 
-      if (!isNaN(before) && !isNaN(after) && before !== 0) {
-        const nextPercent = ((after - before) / before) * 100;
-        setNumber(pEl, nextPercent);
-        return;
-      }
-    }
+.title-link {
+  color: inherit;
+  text-decoration: none;
+  cursor: default;
+}
 
-    bEl.addEventListener('input', () => calc('before'));
-    aEl.addEventListener('input', () => calc('after'));
-    pEl.addEventListener('input', () => calc('pct'));
-  </script>
+.fields-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field {
+  min-width: 0;
+}
+
+label {
+  display: block;
+  margin-bottom: 3px;
+  font-size: 13px;
+  color: var(--text-sub);
+}
+
+input {
+  width: 100%;
+  padding: 8px 10px;
+  margin-bottom: 0;
+  border-radius: 6px;
+  border: 1px solid var(--input-border);
+  font-size: 15px;
+  font-family: var(--ui-font);
+  background: var(--input-bg);
+  color: var(--text-main);
+  text-align: center;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+input::placeholder { color: var(--placeholder); }
+input:focus { outline: none; border-color: #888; }
+.transparent-input { background: transparent; }
+
+@media (min-width: 600px) {
+  .fields-row {
+    flex-direction: row;
+    gap: 12px;
+  }
+
+  .field {
+    flex: 1;
+  }
+}
+</style>
+
+<script>
+const bEl = document.getElementById("before");
+const aEl = document.getElementById("after");
+const pEl = document.getElementById("pct");
+
+function parseValue(el) {
+  return parseFloat(String(el.value).replace(/,/g, ""));
+}
+
+function setNumber(el, value) {
+  el.value = Number.isInteger(value) ? String(value) : value.toFixed(2);
+}
+
+function calc(changed) {
+  const before = parseValue(bEl);
+  const after = parseValue(aEl);
+  const percent = parseValue(pEl);
+
+  if (changed === "pct" && !isNaN(before) && !isNaN(percent)) {
+    const nextAfter = before * (1 + percent / 100);
+    setNumber(aEl, nextAfter);
+    return;
+  }
+
+  if (changed === "after" && isNaN(before) && !isNaN(after) && !isNaN(percent) && percent !== -100) {
+    const nextBefore = after / (1 + percent / 100);
+    setNumber(bEl, nextBefore);
+    return;
+  }
+
+  if (!isNaN(before) && !isNaN(after) && before !== 0) {
+    const nextPercent = ((after - before) / before) * 100;
+    setNumber(pEl, nextPercent);
+  }
+}
+
+bEl.addEventListener("input", () => calc("before"));
+aEl.addEventListener("input", () => calc("after"));
+pEl.addEventListener("input", () => calc("pct"));
+</script>
+
 
 
 </body></html>
