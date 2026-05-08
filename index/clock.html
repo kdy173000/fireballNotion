@@ -1,10 +1,9 @@
-<!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>해외 출장 시간</title>
-<link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+<link rel="stylesheet" crossorigin="" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 <style>
 :root {
   color-scheme: light dark;
@@ -59,7 +58,8 @@ body {
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  padding: 30px;
 }
 
 .container {
@@ -146,12 +146,11 @@ body {
   letter-spacing: 0.03em;
 }
 
-/* ── 출장 타이틀 ── */
 .trip-title {
-  font-size: clamp(13px, 3.5vw, 20px);
-  font-weight: 600;
-  color: var(--text-sub);
-  letter-spacing: 0.08em;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: 0;
   text-align: center;
   user-select: none;
   text-decoration: none;
@@ -187,6 +186,15 @@ select:focus { border-color: var(--select-border-focus); }
 option { background: var(--option-bg); color: var(--option-text); }
 
 @media (max-width: 480px) {
+  body {
+    padding: 20px 16px;
+  }
+  .container {
+    gap: 1.25rem;
+  }
+  .trip-title {
+    font-size: 22px;
+  }
   .clock-face {
     width: min(82vw, 300px);
     height: min(82vw, 300px);
@@ -203,9 +211,7 @@ option { background: var(--option-bg); color: var(--option-text); }
 
 <div class="container">
 
-  <a href="https://kdy173000.github.io/fireballNotion/" 
-   class="trip-title"
-   rel="noopener noreferrer">
+  <a href="https://kdy173000.github.io/fireballNotion/" class="trip-title" rel="noopener noreferrer">
    해외 출장 시간
 </a>
 
@@ -249,10 +255,11 @@ option { background: var(--option-bg); color: var(--option-text); }
 
   <div class="clock-face" id="clockFace">
     <div class="digital-block">
-      <div class="time-str" id="timeStr">00:00:00</div>
-      <div class="date-str" id="dateStr">04월 23일 (목)</div>
+      <div class="time-str" id="timeStr">16:36:05</div>
+      <div class="date-str" id="dateStr">05월 08일 (금)</div>
     </div>
-  </div>
+  <svg width="300" height="300" style="position: absolute; top: 0px; left: 0px; pointer-events: none;"><line x1="150" y1="9.900000000000006" x2="150" y2="24" stroke-width="2" stroke-linecap="round" stroke="rgba(245,245,245,0.9)" opacity="1"></line><line x1="220.05" y1="28.66984092980016" x2="215.55" y2="36.46406956386011" stroke-width="1.5" stroke-linecap="round" stroke="rgba(245,245,245,0.5)" opacity="1"></line><line x1="271.33015907019984" y1="79.95000000000002" x2="263.5359304361399" y2="84.45000000000002" stroke-width="1.5" stroke-linecap="round" stroke="rgba(245,245,245,0.5)" opacity="1"></line><line x1="290.1" y1="150" x2="276" y2="150" stroke-width="2" stroke-linecap="round" stroke="rgba(245,245,245,0.9)" opacity="1"></line><line x1="271.33015907019984" y1="220.04999999999998" x2="263.5359304361399" y2="215.54999999999998" stroke-width="1.5" stroke-linecap="round" stroke="rgba(245,245,245,0.5)" opacity="1"></line><line x1="220.05" y1="271.33015907019984" x2="215.55" y2="263.5359304361399" stroke-width="1.5" stroke-linecap="round" stroke="rgba(245,245,245,0.5)" opacity="1"></line><line x1="150" y1="290.1" x2="150" y2="276" stroke-width="2" stroke-linecap="round" stroke="rgba(245,245,245,0.9)" opacity="1"></line><line x1="79.95000000000003" y1="271.33015907019984" x2="84.45000000000003" y2="263.5359304361399" stroke-width="1.5" stroke-linecap="round" stroke="rgba(245,245,245,0.5)" opacity="1"></line><line x1="28.669840929800145" y1="220.04999999999998" x2="36.46406956386009" y2="215.54999999999998" stroke-width="1.5" stroke-linecap="round" stroke="rgba(245,245,245,0.5)" opacity="1"></line><line x1="9.900000000000006" y1="150.00000000000003" x2="24" y2="150.00000000000003" stroke-width="2" stroke-linecap="round" stroke="rgba(245,245,245,0.9)" opacity="1"></line><line x1="28.66984092980016" y1="79.94999999999999" x2="36.46406956386011" y2="84.44999999999999" stroke-width="1.5" stroke-linecap="round" stroke="rgba(245,245,245,0.5)" opacity="1"></line><line x1="79.94999999999995" y1="28.669840929800188" x2="84.44999999999995" y2="36.464069563860136" stroke-width="1.5" stroke-linecap="round" stroke="rgba(245,245,245,0.5)" opacity="1"></line></svg><div class="hand hour" style="transform: rotate(138.046deg);"></div><div class="hand minute" style="transform: rotate(216.558deg);"></div><div class="hand second" style="transform: rotate(33.48deg);"></div><div class="center-dot"></div></div>
+</div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -388,5 +395,6 @@ document.addEventListener('DOMContentLoaded', function () {
   tick();
 });
 </script>
-</body>
-</html>
+
+
+</body></html>
