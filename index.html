@@ -1,8 +1,7 @@
-<!DOCTYPE html>
 <html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tools</title>
 
   <style>
@@ -86,7 +85,7 @@
       text-decoration: none;
       color: var(--text-main);
 
-      transition: 0.25s;
+      transition: transform 0.25s, background 0.25s, border-color 0.25s;
       backdrop-filter: blur(6px);
     }
 
@@ -123,22 +122,30 @@
 
       p {
         font-size: 13px;
-        margin-bottom: 20px;
+        margin-bottom: 18px;
       }
 
       .menu-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
+        grid-template-columns: 1fr;
+        gap: 8px;
       }
 
       .menu-card {
-        padding: 20px 12px;
-        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: 10px 14px;
+        border-radius: 12px;
+      }
+
+      .menu-card:hover {
+        transform: translateY(-2px);
       }
 
       .menu-card h2 {
-        font-size: 16px;
-        margin-bottom: 6px;
+        font-size: 15px;
+        margin-bottom: 0;
       }
 
       .menu-card span {
@@ -174,13 +181,13 @@
       <a href="https://kdy173000.github.io/fireballNotion/index/KRW.html" class="menu-card">
         <h2>환율 계산</h2>
       </a>
-      
+
       <a href="https://kdy173000.github.io/fireballNotion/index/percent.html" class="menu-card">
         <h2>변화율 계산</h2>
       </a>
 
-
     </div>
   </div>
-</body>
-</html>
+
+
+</body></html>
