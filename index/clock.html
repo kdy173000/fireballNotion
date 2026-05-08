@@ -89,19 +89,19 @@ body {
 
 .hand.hour {
   width: 3px;
-  height: 24%;
+  height: 72px;
   margin-left: -1.5px;
 }
 
 .hand.minute {
   width: 2px;
-  height: 36%;
+  height: 108px;
   margin-left: -1px;
 }
 
 .hand.second {
   width: 1px;
-  height: 40%;
+  height: 120px;
   margin-left: -0.5px;
   background: var(--second-hand);
   opacity: 1;
@@ -198,6 +198,9 @@ option { background: var(--option-bg); color: var(--option-text); }
     width: min(82vw, 300px);
     height: min(82vw, 300px);
   }
+  .hand.hour   { height: 62px;  margin-left: -1.5px; }
+  .hand.minute { height: 88px;  margin-left: -1px; }
+  .hand.second { height: 100px; margin-left: -0.5px; }
   .time-str { font-size: 22px; }
   .date-str { font-size: 12px; }
 }
@@ -251,10 +254,10 @@ option { background: var(--option-bg); color: var(--option-text); }
 
   <div class="clock-face" id="clockFace">
     <div class="digital-block">
-      <div class="time-str" id="timeStr">16:57:15</div>
+      <div class="time-str" id="timeStr">16:59:02</div>
       <div class="date-str" id="dateStr">05월 08일 (금)</div>
     </div>
-  <svg width="300" height="300" style="position: absolute; top: 0px; left: 0px; pointer-events: none;"><line x1="150" y1="9.900000000000006" x2="150" y2="24" stroke-width="2" stroke-linecap="round" stroke="rgba(245,245,245,0.9)" opacity="1"></line><line x1="220.05" y1="28.66984092980016" x2="215.55" y2="36.46406956386011" stroke-width="1.5" stroke-linecap="round" stroke="rgba(245,245,245,0.5)" opacity="1"></line><line x1="271.33015907019984" y1="79.95000000000002" x2="263.5359304361399" y2="84.45000000000002" stroke-width="1.5" stroke-linecap="round" stroke="rgba(245,245,245,0.5)" opacity="1"></line><line x1="290.1" y1="150" x2="276" y2="150" stroke-width="2" stroke-linecap="round" stroke="rgba(245,245,245,0.9)" opacity="1"></line><line x1="271.33015907019984" y1="220.04999999999998" x2="263.5359304361399" y2="215.54999999999998" stroke-width="1.5" stroke-linecap="round" stroke="rgba(245,245,245,0.5)" opacity="1"></line><line x1="220.05" y1="271.33015907019984" x2="215.55" y2="263.5359304361399" stroke-width="1.5" stroke-linecap="round" stroke="rgba(245,245,245,0.5)" opacity="1"></line><line x1="150" y1="290.1" x2="150" y2="276" stroke-width="2" stroke-linecap="round" stroke="rgba(245,245,245,0.9)" opacity="1"></line><line x1="79.95000000000003" y1="271.33015907019984" x2="84.45000000000003" y2="263.5359304361399" stroke-width="1.5" stroke-linecap="round" stroke="rgba(245,245,245,0.5)" opacity="1"></line><line x1="28.669840929800145" y1="220.04999999999998" x2="36.46406956386009" y2="215.54999999999998" stroke-width="1.5" stroke-linecap="round" stroke="rgba(245,245,245,0.5)" opacity="1"></line><line x1="9.900000000000006" y1="150.00000000000003" x2="24" y2="150.00000000000003" stroke-width="2" stroke-linecap="round" stroke="rgba(245,245,245,0.9)" opacity="1"></line><line x1="28.66984092980016" y1="79.94999999999999" x2="36.46406956386011" y2="84.44999999999999" stroke-width="1.5" stroke-linecap="round" stroke="rgba(245,245,245,0.5)" opacity="1"></line><line x1="79.94999999999995" y1="28.669840929800188" x2="84.44999999999995" y2="36.464069563860136" stroke-width="1.5" stroke-linecap="round" stroke="rgba(245,245,245,0.5)" opacity="1"></line></svg><div class="hand hour" style="transform: rotate(148.631deg);"></div><div class="hand minute" style="transform: rotate(343.57deg);"></div><div class="hand second" style="transform: rotate(94.176deg);"></div><div class="center-dot"></div></div>
+  <svg width="300" height="300" style="position: absolute; top: 0px; left: 0px; pointer-events: none;"><line x1="150" y1="9.900000000000006" x2="150" y2="24" stroke-width="2" stroke-linecap="round" stroke="rgba(245,245,245,0.9)" opacity="1"></line><line x1="220.05" y1="28.66984092980016" x2="215.55" y2="36.46406956386011" stroke-width="1.5" stroke-linecap="round" stroke="rgba(245,245,245,0.5)" opacity="1"></line><line x1="271.33015907019984" y1="79.95000000000002" x2="263.5359304361399" y2="84.45000000000002" stroke-width="1.5" stroke-linecap="round" stroke="rgba(245,245,245,0.5)" opacity="1"></line><line x1="290.1" y1="150" x2="276" y2="150" stroke-width="2" stroke-linecap="round" stroke="rgba(245,245,245,0.9)" opacity="1"></line><line x1="271.33015907019984" y1="220.04999999999998" x2="263.5359304361399" y2="215.54999999999998" stroke-width="1.5" stroke-linecap="round" stroke="rgba(245,245,245,0.5)" opacity="1"></line><line x1="220.05" y1="271.33015907019984" x2="215.55" y2="263.5359304361399" stroke-width="1.5" stroke-linecap="round" stroke="rgba(245,245,245,0.5)" opacity="1"></line><line x1="150" y1="290.1" x2="150" y2="276" stroke-width="2" stroke-linecap="round" stroke="rgba(245,245,245,0.9)" opacity="1"></line><line x1="79.95000000000003" y1="271.33015907019984" x2="84.45000000000003" y2="263.5359304361399" stroke-width="1.5" stroke-linecap="round" stroke="rgba(245,245,245,0.5)" opacity="1"></line><line x1="28.669840929800145" y1="220.04999999999998" x2="36.46406956386009" y2="215.54999999999998" stroke-width="1.5" stroke-linecap="round" stroke="rgba(245,245,245,0.5)" opacity="1"></line><line x1="9.900000000000006" y1="150.00000000000003" x2="24" y2="150.00000000000003" stroke-width="2" stroke-linecap="round" stroke="rgba(245,245,245,0.9)" opacity="1"></line><line x1="28.66984092980016" y1="79.94999999999999" x2="36.46406956386011" y2="84.44999999999999" stroke-width="1.5" stroke-linecap="round" stroke="rgba(245,245,245,0.5)" opacity="1"></line><line x1="79.94999999999995" y1="28.669840929800188" x2="84.44999999999995" y2="36.464069563860136" stroke-width="1.5" stroke-linecap="round" stroke="rgba(245,245,245,0.5)" opacity="1"></line></svg><div class="hand hour" style="transform: rotate(149.523deg);"></div><div class="hand minute" style="transform: rotate(354.276deg);"></div><div class="hand second" style="transform: rotate(16.548deg);"></div><div class="center-dot"></div></div>
 </div>
 
 <script>
