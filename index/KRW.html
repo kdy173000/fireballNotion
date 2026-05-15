@@ -13,12 +13,12 @@
     <!-- PC 레이아웃 -->
     <div class="calc-row pc-only">
       <div class="col">
-        <label id="labelFromPC">USD</label>
+        <label id="labelFromPC">KRW</label>
         <input type="text" id="fromAmountPC" placeholder="10,000" inputmode="decimal">
       </div>
       <button class="swap-btn" id="swapBtnPC" aria-label="통화 교체">⇄</button>
       <div class="col">
-        <label id="labelToPC">KRW</label>
+        <label id="labelToPC">USD</label>
         <input type="text" id="toAmountPC" placeholder="7.25" inputmode="decimal">
       </div>
     </div>
@@ -57,7 +57,7 @@
     <!-- 모바일 레이아웃 -->
     <div class="mobile-only">
       <div class="mobile-block">
-        <label id="labelFromM">USD</label>
+        <label id="labelFromM">KRW</label>
         <input type="text" id="fromAmountM" placeholder="10,000" inputmode="decimal">
         <select id="fromCurrencyM">
           <option value="KRW">🇰🇷 KRW — 한국 원</option>
@@ -78,7 +78,7 @@
         <button class="swap-btn-m" id="swapBtnM" aria-label="통화 교체">⇅</button>
       </div>
       <div class="mobile-block">
-        <label id="labelToM">KRW</label>
+        <label id="labelToM">USD</label>
         <input type="text" id="toAmountM" placeholder="7.25" inputmode="decimal">
         <select id="toCurrencyM">
           <option value="USD">🇺🇸 USD — 미국 달러</option>
@@ -97,7 +97,8 @@
       </div>
     </div>
 
-    <div class="rate-info" id="rateInfo">1 USD = 1,491.935477 KRW  ·  open.er-api.com</div>
+    <div class="rate-info" id="rateInfo">1 KRW = 0.00067 USD  ·  open.er-api.com</div>
+    <button type="button" class="reset-btn" id="resetBtn">초기화</button>
   </div>
 
   <style>
@@ -144,16 +145,16 @@
       font-family: var(--ui-font);
       border: 1px solid var(--calc-border);
       border-radius: 14px;
-      padding: 30px;
-      max-width: 700px;
+      padding: 20px 24px 24px;
+      max-width: 800px;
       margin: 0 auto;
       background: transparent;
       color: var(--text-main);
     }
     .calc-title{
       text-align: center;
-      margin: 0 0 25px 0;
-      font-size: 26px;
+      margin: 0 0 18px 0;
+      font-size: 22px;
       font-weight: 700;
     }
     .title-link{
@@ -246,11 +247,28 @@
       text-align: center;
       display:none;
     }
+    .reset-btn{
+      width: 100%;
+      margin-top: 12px;
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--input-border);
+      background: transparent;
+      color: var(--text-sub);
+      font-size: 13px;
+      font-family: var(--ui-font);
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .reset-btn:hover{
+      border-color: #888;
+      color: var(--text-main);
+    }
     /* 모바일 */
     @media (max-width: 480px){
       .pc-only{ display: none !important; }
       .mobile-only{ display: block; }
-      .currency-calculator{ padding: 20px; }
+      .currency-calculator{ padding: 20px 20px 22px; }
       .calc-title{ font-size: 22px; }
       .mobile-block{
         display: flex;
@@ -403,6 +421,13 @@
       loadRates();
     }
 
+    function resetValues() {
+      document.getElementById('fromAmountPC').value = '';
+      document.getElementById('toAmountPC').value = '';
+      document.getElementById('fromAmountM').value = '';
+      document.getElementById('toAmountM').value = '';
+    }
+
     document.getElementById('fromAmountPC').addEventListener('input', convertFrom);
     document.getElementById('toAmountPC').addEventListener('input', convertTo);
     document.getElementById('fromAmountPC').addEventListener('blur', () => formatCurrentInput(document.getElementById('fromAmountPC'), document.getElementById('fromCurrencyPC').value));
@@ -426,6 +451,7 @@
       syncSelects('toCurrencyM', e.target.value); updateLabels(); updateRateInfo(); convertFrom();
     });
     document.getElementById('swapBtnM').addEventListener('click', doSwap);
+    document.getElementById('resetBtn').addEventListener('click', resetValues);
 
     updateLabels();
     loadRates();
