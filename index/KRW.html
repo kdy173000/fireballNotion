@@ -109,6 +109,7 @@
       --text-main: #111;
       --text-sub: #444;
       --input-border: #cfcfcf;
+      --input-readonly-bg: rgba(0,0,0,0.03);
       --placeholder: #9a9a9a;
       --rate-bg: #f5f5f5;
       --rate-color: #555555;
@@ -117,7 +118,7 @@
       --select-bg: transparent;
       --option-bg: #ffffff;
       --option-text: #111111;
-      --button-bg: rgba(0,0,0,0.03);
+      --button-bg: var(--input-readonly-bg);
       --button-hover: rgba(0,0,0,0.06);
       --gap: 20px;
       --btn-w: 24px;
@@ -129,7 +130,8 @@
         --text-main: #f0f0f0;
         --text-sub: #aaaaaa;
         --input-border: #444444;
-        --placeholder: #9b9b9b;
+        --input-readonly-bg: rgba(255,255,255,0.04);
+        --placeholder: #666666;
         --rate-bg: #2a2a2a;
         --rate-color: #aaaaaa;
         --swap-color: #aaaaaa;
@@ -137,7 +139,7 @@
         --select-bg: transparent;
         --option-bg: #1e1e1e;
         --option-text: #ffffff;
-        --button-bg: rgba(255,255,255,0.04);
+        --button-bg: var(--input-readonly-bg);
         --button-hover: rgba(255,255,255,0.08);
       }
     }
@@ -260,14 +262,16 @@
       display:none;
     }
     .reset-btn{
+      appearance: none;
+      -webkit-appearance: none;
       width: 100%;
       margin-top: 12px;
       padding: 8px 10px;
       border-radius: 6px;
       border: 1px solid var(--input-border);
       background: var(--button-bg);
-      color: var(--text-sub);
-      font-size: 13px;
+      color: var(--placeholder);
+      font-size: 15px;
       font-family: var(--ui-font);
       cursor: pointer;
       transition: background 0.2s, border-color 0.2s, color 0.2s;
