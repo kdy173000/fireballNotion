@@ -1,401 +1,484 @@
 <html lang="ko"><head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>해외 출장 시간</title>
-<link rel="stylesheet" crossorigin="" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
-<style>
-:root {
-  color-scheme: light dark;
-  --ui-font: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-
-  --bg-page: transparent;
-  --text-main: #111111;
-  --text-sub: #444444;
-  --select-text: #111111;
-  --select-label: #444444;
-  --select-border: #cfcfcf;
-  --select-border-hover: #b8b8b8;
-  --select-border-focus: #999999;
-  --select-bg: transparent;
-  --option-bg: #ffffff;
-  --option-text: #111111;
-
-  --hand: #111111;
-  --second-hand: #111111;
-  --center-dot: #111111;
-  --tick-major: rgba(17,17,17,0.9);
-  --tick-minor: rgba(17,17,17,0.5);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg-page: transparent;
-    --text-main: #f5f5f5;
-    --text-sub: #d6d6d6;
-    --select-text: #f5f5f5;
-    --select-label: #d6d6d6;
-    --select-border: #666666;
-    --select-border-hover: #7a7a7a;
-    --select-border-focus: #8d8d8d;
-    --select-bg: transparent;
-    --option-bg: #1e1e1e;
-    --option-text: #ffffff;
-
-    --hand: #f5f5f5;
-    --second-hand: #f5f5f5;
-    --center-dot: #f5f5f5;
-    --tick-major: rgba(245,245,245,0.9);
-    --tick-minor: rgba(245,245,245,0.5);
-  }
-}
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  font-family: var(--ui-font);
-  background: var(--bg-page);
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 30px;
-}
-
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-.clock-face {
-  position: relative;
-  width: min(78vw, 300px);
-  height: min(78vw, 300px);
-  border-radius: 50%;
-  background: transparent;
-}
-
-.hand {
-  position: absolute;
-  left: 50%;
-  bottom: 50%;
-  transform-origin: bottom center;
-  border-radius: 999px;
-  background: var(--hand);
-  will-change: transform;
-  backface-visibility: hidden;
-}
-
-.hand.hour {
-  width: 3px;
-  height: 72px;
-  margin-left: -1.5px;
-}
-
-.hand.minute {
-  width: 2px;
-  height: 108px;
-  margin-left: -1px;
-}
-
-.hand.second {
-  width: 1px;
-  height: 120px;
-  margin-left: -0.5px;
-  background: var(--second-hand);
-  opacity: 1;
-}
-
-.center-dot {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 7px;
-  height: 7px;
-  margin: -3.5px 0 0 -3.5px;
-  border-radius: 50%;
-  background: var(--center-dot);
-  z-index: 5;
-}
-
-.digital-block {
-  position: absolute;
-  left: 50%;
-  top: 62%;
-  transform: translateX(-50%);
-  text-align: center;
-  pointer-events: none;
-  white-space: nowrap;
-}
-
-.time-str {
-  font-size: 26px;
-  font-weight: 500;
-  color: var(--text-main);
-  letter-spacing: 0.04em;
-  line-height: 1;
-}
-
-.date-str {
-  margin-top: 6px;
-  font-size: 13px;
-  color: var(--text-sub);
-  font-weight: 400;
-  letter-spacing: 0.03em;
-}
-
-.trip-title {
-  font-size: 26px;
-  font-weight: 700;
-  color: var(--text-main);
-  letter-spacing: 0;
-  text-align: center;
-  user-select: none;
-  text-decoration: none;
-}
-
-.select-area {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  width: min(82vw, 260px);
-}
-
-select {
-  width: 100%;
-  padding: 9px 12px;
-  border-radius: 8px;
-  border: 1px solid var(--select-border);
-  background: var(--select-bg);
-  color: var(--select-text);
-  font-size: 14px;
-  font-family: var(--ui-font);
-  font-weight: 400;
-  appearance: none;
-  -webkit-appearance: none;
-  cursor: pointer;
-  outline: none;
-  transition: border-color 0.2s, background 0.2s, color 0.2s;
-}
-
-select:hover { border-color: var(--select-border-hover); }
-select:focus { border-color: var(--select-border-focus); }
-
-option { background: var(--option-bg); color: var(--option-text); }
-
-@media (max-width: 480px) {
-  body {
-    padding: 20px 16px;
-  }
-  .container {
-    gap: 1.25rem;
-  }
-  .trip-title {
-    font-size: 22px;
-  }
-  .clock-face {
-    width: min(82vw, 300px);
-    height: min(82vw, 300px);
-  }
-  .hand.hour   { height: 62px;  margin-left: -1.5px; }
-  .hand.minute { height: 88px;  margin-left: -1px; }
-  .hand.second { height: 100px; margin-left: -0.5px; }
-  .time-str { font-size: 22px; }
-  .date-str { font-size: 12px; }
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>환율 계산기</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 </head>
 <body>
+  <div class="currency-calculator">
+    <h2 class="calc-title">
+      <a href="https://kdy173000.github.io/fireballNotion/" class="title-link">환율 계산기</a>
+    </h2>
 
-<div class="container">
+    <!-- PC 레이아웃 -->
+    <div class="calc-row pc-only">
+      <div class="col">
+        <label id="labelFromPC">KRW</label>
+        <input type="text" id="fromAmountPC" placeholder="10,000" inputmode="decimal">
+      </div>
+      <button class="swap-btn" id="swapBtnPC" aria-label="통화 교체">⇄</button>
+      <div class="col">
+        <label id="labelToPC">USD</label>
+        <input type="text" id="toAmountPC" placeholder="7.25" inputmode="decimal">
+      </div>
+    </div>
+    <div class="select-row pc-only">
+      <select id="fromCurrencyPC">
+        <option value="KRW">🇰🇷 KRW — 한국 원</option>
+        <option value="USD">🇺🇸 USD — 미국 달러</option>
+        <option value="EUR">🇪🇺 EUR — 유로</option>
+        <option value="JPY">🇯🇵 JPY — 일본 엔</option>
+        <option value="CNY">🇨🇳 CNY — 중국 위안</option>
+        <option value="GBP">🇬🇧 GBP — 영국 파운드</option>
+        <option value="HKD">🇭🇰 HKD — 홍콩 달러</option>
+        <option value="AUD">🇦🇺 AUD — 호주 달러</option>
+        <option value="CAD">🇨🇦 CAD — 캐나다 달러</option>
+        <option value="SGD">🇸🇬 SGD — 싱가포르 달러</option>
+        <option value="THB">🇹🇭 THB — 태국 바트</option>
+        <option value="VND">🇻🇳 VND — 베트남 동</option>
+      </select>
+      <div class="mid-gap"></div>
+      <select id="toCurrencyPC">
+        <option value="USD">🇺🇸 USD — 미국 달러</option>
+        <option value="KRW">🇰🇷 KRW — 한국 원</option>
+        <option value="EUR">🇪🇺 EUR — 유로</option>
+        <option value="JPY">🇯🇵 JPY — 일본 엔</option>
+        <option value="CNY">🇨🇳 CNY — 중국 위안</option>
+        <option value="GBP">🇬🇧 GBP — 영국 파운드</option>
+        <option value="HKD">🇭🇰 HKD — 홍콩 달러</option>
+        <option value="AUD">🇦🇺 AUD — 호주 달러</option>
+        <option value="CAD">🇨🇦 CAD — 캐나다 달러</option>
+        <option value="SGD">🇸🇬 SGD — 싱가포르 달러</option>
+        <option value="THB">🇹🇭 THB — 태국 바트</option>
+        <option value="VND">🇻🇳 VND — 베트남 동</option>
+      </select>
+    </div>
 
-  <a href="https://kdy173000.github.io/fireballNotion/" class="trip-title" rel="noopener noreferrer">
-   해외 출장 시간
-</a>
+    <!-- 모바일 레이아웃 -->
+    <div class="mobile-only">
+      <div class="mobile-block">
+        <label id="labelFromM">KRW</label>
+        <input type="text" id="fromAmountM" placeholder="10,000" inputmode="decimal">
+        <select id="fromCurrencyM">
+          <option value="KRW">🇰🇷 KRW — 한국 원</option>
+          <option value="USD">🇺🇸 USD — 미국 달러</option>
+          <option value="EUR">🇪🇺 EUR — 유로</option>
+          <option value="JPY">🇯🇵 JPY — 일본 엔</option>
+          <option value="CNY">🇨🇳 CNY — 중국 위안</option>
+          <option value="GBP">🇬🇧 GBP — 영국 파운드</option>
+          <option value="HKD">🇭🇰 HKD — 홍콩 달러</option>
+          <option value="AUD">🇦🇺 AUD — 호주 달러</option>
+          <option value="CAD">🇨🇦 CAD — 캐나다 달러</option>
+          <option value="SGD">🇸🇬 SGD — 싱가포르 달러</option>
+          <option value="THB">🇹🇭 THB — 태국 바트</option>
+          <option value="VND">🇻🇳 VND — 베트남 동</option>
+        </select>
+      </div>
+      <div class="mobile-swap-row">
+        <button class="swap-btn-m" id="swapBtnM" aria-label="통화 교체">⇅</button>
+      </div>
+      <div class="mobile-block">
+        <label id="labelToM">USD</label>
+        <input type="text" id="toAmountM" placeholder="7.25" inputmode="decimal">
+        <select id="toCurrencyM">
+          <option value="USD">🇺🇸 USD — 미국 달러</option>
+          <option value="KRW">🇰🇷 KRW — 한국 원</option>
+          <option value="EUR">🇪🇺 EUR — 유로</option>
+          <option value="JPY">🇯🇵 JPY — 일본 엔</option>
+          <option value="CNY">🇨🇳 CNY — 중국 위안</option>
+          <option value="GBP">🇬🇧 GBP — 영국 파운드</option>
+          <option value="HKD">🇭🇰 HKD — 홍콩 달러</option>
+          <option value="AUD">🇦🇺 AUD — 호주 달러</option>
+          <option value="CAD">🇨🇦 CAD — 캐나다 달러</option>
+          <option value="SGD">🇸🇬 SGD — 싱가포르 달러</option>
+          <option value="THB">🇹🇭 THB — 태국 바트</option>
+          <option value="VND">🇻🇳 VND — 베트남 동</option>
+        </select>
+      </div>
+    </div>
 
-  <div class="select-area">
-    <select id="tzSel">
-      <!-- 아시아 -->
-      <option value="Asia/Seoul">대한민국 / 서울</option>
-      <option value="Asia/Tokyo">일본 / 도쿄</option>
-      <option value="Asia/Shanghai">중국 / 상하이</option>
-      <option value="Asia/Singapore">싱가포르</option>
-      <option value="Asia/Brunei">브루나이</option>
-      <option value="Asia/Manila">필리핀 / 마닐라</option>
-      <option value="Asia/Ho_Chi_Minh">베트남 / 호치민</option>
-      <option value="Asia/Bangkok">태국 / 방콕</option>
-      <option value="Asia/Jakarta">인도네시아 / 자카르타</option>
-      <option value="Asia/Kolkata">인도 / 뉴델리</option>
-      <option value="Asia/Tashkent">우즈베키스탄 / 타슈켄트</option>
-      <option value="Asia/Dubai">아랍에미리트 / 두바이</option>
-      <!-- 유럽 -->
-      <option value="Europe/London">영국 / 런던</option>
-      <option value="Europe/Paris">프랑스 / 파리</option>
-      <option value="Europe/Berlin">독일 / 베를린</option>
-      <option value="Europe/Warsaw">폴란드 / 바르샤바</option>
-      <option value="Europe/Kyiv">우크라이나 / 키이우</option>
-      <option value="Europe/Istanbul">튀르키에 / 이스탄불</option>
-      <option value="Europe/Moscow">러시아 / 모스크바</option>
-      <!-- 아메리카 -->
-      <option value="America/New_York">미국 / 뉴욕</option>
-      <option value="America/Chicago">미국 / 시카고</option>
-      <option value="America/Denver">미국 / 덴버</option>
-      <option value="America/Los_Angeles">미국 / 로스앤젤레스</option>
-      <option value="America/Toronto">캐나다 / 토론토</option>
-      <option value="America/Puerto_Rico">푸에르토리코</option>
-      <option value="America/Sao_Paulo">브라질 / 상파울루</option>
-      <option value="America/Santiago">칠레 / 산티아고</option>
-      <!-- 오세아니아 -->
-      <option value="Australia/Sydney">호주 / 시드니</option>
-      <option value="Pacific/Auckland">뉴질랜드 / 오클랜드</option>
-    </select>
+    <div class="rate-info" id="rateInfo">1 KRW = 0.000668 USD  ·  open.er-api.com</div>
+    <button type="button" class="reset-btn" id="resetBtn">초기화</button>
   </div>
 
-  <div class="clock-face" id="clockFace">
-    <div class="digital-block">
-      <div class="time-str" id="timeStr">16:59:02</div>
-      <div class="date-str" id="dateStr">05월 08일 (금)</div>
-    </div>
-  <svg width="300" height="300" style="position: absolute; top: 0px; left: 0px; pointer-events: none;"><line x1="150" y1="9.900000000000006" x2="150" y2="24" stroke-width="2" stroke-linecap="round" stroke="rgba(245,245,245,0.9)" opacity="1"></line><line x1="220.05" y1="28.66984092980016" x2="215.55" y2="36.46406956386011" stroke-width="1.5" stroke-linecap="round" stroke="rgba(245,245,245,0.5)" opacity="1"></line><line x1="271.33015907019984" y1="79.95000000000002" x2="263.5359304361399" y2="84.45000000000002" stroke-width="1.5" stroke-linecap="round" stroke="rgba(245,245,245,0.5)" opacity="1"></line><line x1="290.1" y1="150" x2="276" y2="150" stroke-width="2" stroke-linecap="round" stroke="rgba(245,245,245,0.9)" opacity="1"></line><line x1="271.33015907019984" y1="220.04999999999998" x2="263.5359304361399" y2="215.54999999999998" stroke-width="1.5" stroke-linecap="round" stroke="rgba(245,245,245,0.5)" opacity="1"></line><line x1="220.05" y1="271.33015907019984" x2="215.55" y2="263.5359304361399" stroke-width="1.5" stroke-linecap="round" stroke="rgba(245,245,245,0.5)" opacity="1"></line><line x1="150" y1="290.1" x2="150" y2="276" stroke-width="2" stroke-linecap="round" stroke="rgba(245,245,245,0.9)" opacity="1"></line><line x1="79.95000000000003" y1="271.33015907019984" x2="84.45000000000003" y2="263.5359304361399" stroke-width="1.5" stroke-linecap="round" stroke="rgba(245,245,245,0.5)" opacity="1"></line><line x1="28.669840929800145" y1="220.04999999999998" x2="36.46406956386009" y2="215.54999999999998" stroke-width="1.5" stroke-linecap="round" stroke="rgba(245,245,245,0.5)" opacity="1"></line><line x1="9.900000000000006" y1="150.00000000000003" x2="24" y2="150.00000000000003" stroke-width="2" stroke-linecap="round" stroke="rgba(245,245,245,0.9)" opacity="1"></line><line x1="28.66984092980016" y1="79.94999999999999" x2="36.46406956386011" y2="84.44999999999999" stroke-width="1.5" stroke-linecap="round" stroke="rgba(245,245,245,0.5)" opacity="1"></line><line x1="79.94999999999995" y1="28.669840929800188" x2="84.44999999999995" y2="36.464069563860136" stroke-width="1.5" stroke-linecap="round" stroke="rgba(245,245,245,0.5)" opacity="1"></line></svg><div class="hand hour" style="transform: rotate(149.523deg);"></div><div class="hand minute" style="transform: rotate(354.276deg);"></div><div class="hand second" style="transform: rotate(16.548deg);"></div><div class="center-dot"></div></div>
-</div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  const face    = document.getElementById('clockFace');
-  const tzSel   = document.getElementById('tzSel');
-  const timeStr = document.getElementById('timeStr');
-  const dateStr = document.getElementById('dateStr');
-
-  face.querySelectorAll('svg, .hand, .center-dot').forEach(el => el.remove());
-
-  const STORAGE_KEY = "tz";
-  const VERSION_KEY = "tz_version";
-
-  // 여기에 나라를 작성
-  const DEFAULT_TZ = "Asia/Seoul";
-
-  // 여기에 버전을 작성
-  const DEFAULT_TZ_VERSION = "2026-05-18-1";
-
-  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  svg.style.cssText = 'position:absolute;top:0;left:0;pointer-events:none;';
-  face.appendChild(svg);
-
-  function applyTickColors() {
-    const styles = getComputedStyle(document.documentElement);
-    const major  = styles.getPropertyValue('--tick-major').trim();
-    const minor  = styles.getPropertyValue('--tick-minor').trim();
-    [...svg.querySelectorAll('line')].forEach((line, i) => {
-      line.setAttribute('stroke', i % 3 === 0 ? major : minor);
-      line.setAttribute('opacity', '1');
-    });
-  }
-
-  function drawTicks() {
-    const SIZE = face.clientWidth;
-    const CX   = SIZE / 2;
-    const CY   = SIZE / 2;
-    svg.setAttribute('width',  SIZE);
-    svg.setAttribute('height', SIZE);
-    svg.innerHTML = '';
-
-    for (let i = 0; i < 12; i++) {
-      const rad    = (i * 30 - 90) * Math.PI / 180;
-      const outerR = CX - (SIZE * 0.033);
-      const len    = i % 3 === 0 ? SIZE * 0.047 : SIZE * 0.03;
-      const innerR = outerR - len;
-      const line   = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-      line.setAttribute('x1', CX + outerR * Math.cos(rad));
-      line.setAttribute('y1', CY + outerR * Math.sin(rad));
-      line.setAttribute('x2', CX + innerR * Math.cos(rad));
-      line.setAttribute('y2', CY + innerR * Math.sin(rad));
-      line.setAttribute('stroke-width',   i % 3 === 0 ? '2' : '1.5');
-      line.setAttribute('stroke-linecap', 'round');
-      svg.appendChild(line);
+  <style>
+    :root{
+      color-scheme: light dark;
+      --ui-font: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      --calc-border: #d9d9d9;
+      --text-main: #111;
+      --text-sub: #444;
+      --input-border: #cfcfcf;
+      --input-readonly-bg: rgba(0,0,0,0.03);
+      --placeholder: #9a9a9a;
+      --rate-bg: #f5f5f5;
+      --rate-color: #555555;
+      --swap-color: #666666;
+      --swap-hover: #222222;
+      --select-bg: transparent;
+      --option-bg: #ffffff;
+      --option-text: #111111;
+      --button-bg: var(--input-readonly-bg);
+      --button-hover: rgba(0,0,0,0.06);
+      --gap: 20px;
+      --btn-w: 24px;
+      --total-mid: calc(var(--btn-w) + var(--gap) * 2);
     }
-    applyTickColors();
-  }
-
-  ['hour', 'minute', 'second'].forEach(cls => {
-    const d = document.createElement('div');
-    d.className = 'hand ' + cls;
-    face.appendChild(d);
-    face['_' + cls] = d;
-  });
-
-  const dot = document.createElement('div');
-  dot.className = 'center-dot';
-  face.appendChild(dot);
-
-  function getTimeParts(timeZone) {
-    const now  = new Date();
-    const fmt  = new Intl.DateTimeFormat('ko-KR', {
-      timeZone,
-      year: 'numeric', month: '2-digit', day: '2-digit',
-      weekday: 'short',
-      hour: '2-digit', minute: '2-digit', second: '2-digit',
-      hourCycle: 'h23'
-    });
-    const map = {};
-    fmt.formatToParts(now).forEach(p => { map[p.type] = p.value; });
-    return {
-      year: Number(map.year), month: Number(map.month), day: Number(map.day),
-      weekday: map.weekday,
-      hour: Number(map.hour), minute: Number(map.minute), second: Number(map.second),
-      ms: now.getMilliseconds()
-    };
-  }
-
-  function loadTimezone() {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    const ver   = localStorage.getItem(VERSION_KEY);
-    if (ver !== DEFAULT_TZ_VERSION) {
-      tzSel.value = DEFAULT_TZ;
-      localStorage.setItem(STORAGE_KEY, DEFAULT_TZ);
-      localStorage.setItem(VERSION_KEY, DEFAULT_TZ_VERSION);
-    } else {
-      tzSel.value = saved || DEFAULT_TZ;
+    @media (prefers-color-scheme: dark){
+      :root{
+        --calc-border: #3a3a3a;
+        --text-main: #f0f0f0;
+        --text-sub: #aaaaaa;
+        --input-border: #444444;
+        --input-readonly-bg: rgba(255,255,255,0.04);
+        --placeholder: #666666;
+        --rate-bg: #2a2a2a;
+        --rate-color: #aaaaaa;
+        --swap-color: #aaaaaa;
+        --swap-hover: #f5f5f5;
+        --select-bg: transparent;
+        --option-bg: #1e1e1e;
+        --option-text: #ffffff;
+        --button-bg: var(--input-readonly-bg);
+        --button-hover: rgba(255,255,255,0.08);
+      }
     }
-  }
+    *{
+      box-sizing: border-box;
+    }
+    body{
+      margin: 0;
+      font-family: var(--ui-font);
+      background: transparent;
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 20px;
+    }
+    .currency-calculator{
+      font-family: var(--ui-font);
+      border: 1px solid var(--calc-border);
+      border-radius: 14px;
+      padding: 20px 24px 24px;
+      max-width: 800px;
+      margin: 0 auto;
+      background: transparent;
+      color: var(--text-main);
+    }
+    .calc-title{
+      text-align: center;
+      margin: 0 0 18px 0;
+      font-size: 22px;
+      font-weight: 700;
+    }
+    .title-link{
+      color: inherit;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .title-link:hover{
+      cursor: pointer;
+    }
+    /* PC */
+    .pc-only{ display: flex; }
+    .mobile-only{ display: none; }
+    .calc-row{
+      align-items: center;
+      gap: var(--gap);
+    }
+    .col{ flex: 1; min-width: 0; }
+    .col label{
+      display: block;
+      color: var(--text-sub);
+      font-weight: 500;
+      font-size: 13px;
+      margin-bottom: 3px;
+    }
+    .swap-btn{
+      background: none;
+      border: none;
+      font-size: 16px;
+      color: var(--swap-color);
+      cursor: pointer;
+      width: var(--btn-w);
+      flex-shrink: 0;
+      padding: 0;
+      margin-top: 20px;
+      line-height: 1;
+      text-align: center;
+      transition: color 0.15s;
+    }
+    .swap-btn:hover{ color: var(--swap-hover); }
+    .select-row{
+      display: flex;
+      align-items: center;
+      margin-top: 12px;
+    }
+    .mid-gap{
+      width: var(--total-mid);
+      flex-shrink: 0;
+    }
+    input{
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--input-border);
+      font-size: 15px;
+      font-family: var(--ui-font);
+      background: transparent !important;
+      color: var(--text-main);
+      outline: none;
+      box-sizing: border-box;
+    }
+    input::placeholder{ color: var(--placeholder); }
+    select{
+      flex: 1;
+      min-width: 0;
+      width: 100%;
+      padding: 8px 32px 8px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--input-border);
+      font-size: 14px;
+      font-family: var(--ui-font);
+      background-color: var(--select-bg);
+      color: var(--text-main);
+      outline: none;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      box-sizing: border-box;
+    }
+    option{
+      background: var(--option-bg);
+      color: var(--option-text);
+    }
+    .rate-info{
+      margin-top: 14px;
+      font-size: 13px;
+      color: var(--rate-color);
+      background: var(--rate-bg);
+      border-radius: 8px;
+      padding: 8px 14px;
+      text-align: center;
+      display:none;
+    }
+    .reset-btn{
+      appearance: none;
+      -webkit-appearance: none;
+      width: 100%;
+      margin-top: 12px;
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--input-border);
+      background: var(--button-bg);
+      color: var(--placeholder);
+      font-size: 15px;
+      font-family: var(--ui-font);
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .reset-btn:hover{
+      background: var(--button-hover);
+      border-color: #888;
+      color: var(--text-main);
+    }
+    /* 모바일 */
+    @media (max-width: 480px){
+      .pc-only{ display: none !important; }
+      .mobile-only{ display: block; }
+      .currency-calculator{ padding: 20px 20px 22px; }
+      .calc-title{ font-size: 22px; }
+      .mobile-block{
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .mobile-block label{
+        color: var(--text-sub);
+        font-weight: 500;
+        font-size: 13px;
+        margin-bottom: 3px;
+      }
+      .mobile-swap-row{
+        display: flex;
+        justify-content: center;
+        padding: 10px 0;
+      }
+      .swap-btn-m{
+        background: none;
+        border: none;
+        font-size: 16px;
+        color: var(--swap-color);
+        cursor: pointer;
+        padding: 0;
+        line-height: 1;
+        transition: color 0.15s;
+      }
+      .swap-btn-m:hover{ color: var(--swap-hover); }
+    }
+  </style>
 
-  function tick() {
-    const t = getTimeParts(tzSel.value);
-    const smoothSecond = t.second + t.ms / 1000;
-    const smoothMinute = t.minute + smoothSecond / 60;
-    const smoothHour   = (t.hour % 12) + smoothMinute / 60;
+  <script>
+    let rates = {};
+    let isUpdating = false;
+    let isMobile = () => window.innerWidth <= 480;
 
-    face._hour.style.transform   = `rotate(${smoothHour   * 30}deg)`;
-    face._minute.style.transform = `rotate(${smoothMinute *  6}deg)`;
-    face._second.style.transform = `rotate(${smoothSecond *  6}deg)`;
+    async function fetchRates(base) {
+      const apis = [
+        () => fetch(`https://open.er-api.com/v6/latest/${base}`).then(r=>r.json()).then(d=>d.rates),
+        () => fetch(`https://api.frankfurter.app/latest?from=${base}`).then(r=>r.json()).then(d=>d.rates),
+      ];
+      for (const api of apis) {
+        try { const r = await api(); if (r) return r; } catch(e) {}
+      }
+      return null;
+    }
 
-    timeStr.textContent = [t.hour, t.minute, t.second]
-      .map(n => String(n).padStart(2, '0')).join(':');
-    dateStr.textContent =
-      `${String(t.month).padStart(2,'0')}월 ${String(t.day).padStart(2,'0')}일 (${t.weekday})`;
+    function getFrom()      { return isMobile() ? document.getElementById('fromCurrencyM') : document.getElementById('fromCurrencyPC'); }
+    function getTo()        { return isMobile() ? document.getElementById('toCurrencyM')   : document.getElementById('toCurrencyPC'); }
+    function getFromInput() { return isMobile() ? document.getElementById('fromAmountM')   : document.getElementById('fromAmountPC'); }
+    function getToInput()   { return isMobile() ? document.getElementById('toAmountM')     : document.getElementById('toAmountPC'); }
 
-    requestAnimationFrame(tick);
-  }
+    function getRate() { return rates[getTo().value] || null; }
 
-  tzSel.addEventListener('change', () => {
-    localStorage.setItem(STORAGE_KEY, tzSel.value);
-    localStorage.setItem(VERSION_KEY, DEFAULT_TZ_VERSION);
-  });
+    function parseAmount(value) {
+      return parseFloat(String(value).replace(/,/g,''));
+    }
 
-  const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
-  if (darkQuery.addEventListener) {
-    darkQuery.addEventListener('change', applyTickColors);
-  } else if (darkQuery.addListener) {
-    darkQuery.addListener(applyTickColors);
-  }
+    function formatAmount(val, currency) {
+      if (isNaN(val)) return '';
+      const fractionDigits = ['JPY','KRW','VND'].includes(currency) ? 0 : 2;
+      return val.toLocaleString('ko-KR', {
+        minimumFractionDigits: fractionDigits,
+        maximumFractionDigits: fractionDigits
+      });
+    }
 
-  window.addEventListener('resize', drawTicks);
+    function formatInputForCurrency(input, currency) {
+      const val = parseAmount(input.value);
+      input.value = isNaN(val) ? '' : formatAmount(val, currency);
+    }
 
-  loadTimezone();
-  drawTicks();
-  tick();
-});
-</script>
+    function formatCurrentInput(input, currency) {
+      if (input.value.trim() === '') return;
+      formatInputForCurrency(input, currency);
+    }
+
+    function updateLabels() {
+      document.getElementById('labelFromPC').textContent = document.getElementById('fromCurrencyPC').value;
+      document.getElementById('labelToPC').textContent   = document.getElementById('toCurrencyPC').value;
+      document.getElementById('labelFromM').textContent  = document.getElementById('fromCurrencyM').value;
+      document.getElementById('labelToM').textContent    = document.getElementById('toCurrencyM').value;
+    }
+
+    function syncSelects(changedId, val) {
+      const pairs = {
+        fromCurrencyPC: 'fromCurrencyM',
+        fromCurrencyM:  'fromCurrencyPC',
+        toCurrencyPC:   'toCurrencyM',
+        toCurrencyM:    'toCurrencyPC',
+      };
+      const partner = document.getElementById(pairs[changedId]);
+      if (partner) partner.value = val;
+    }
+
+    function updateRateInfo() {
+      const rate = getRate();
+      const rateInfo = document.getElementById('rateInfo');
+      if (rate) {
+        rateInfo.textContent = `1 ${getFrom().value} = ${rate.toLocaleString('ko-KR', {maximumFractionDigits:6})} ${getTo().value}  ·  open.er-api.com`;
+      } else {
+        rateInfo.textContent = '환율 정보를 불러올 수 없습니다.';
+      }
+    }
+
+    async function loadRates() {
+      document.getElementById('rateInfo').textContent = '환율 불러오는 중...';
+      rates = await fetchRates(getFrom().value) || {};
+      updateRateInfo();
+      convertFrom();
+    }
+
+    function convertFrom() {
+      if (isUpdating) return;
+      isUpdating = true;
+      const fromInput = getFromInput();
+      const toInput = getToInput();
+      const val = parseAmount(fromInput.value);
+      const rate = getRate();
+
+      if (!isNaN(val) && rate) toInput.value = formatAmount(val * rate, getTo().value);
+      else toInput.value = '';
+      isUpdating = false;
+    }
+
+    function convertTo() {
+      if (isUpdating) return;
+      isUpdating = true;
+      const fromInput = getFromInput();
+      const toInput = getToInput();
+      const val = parseAmount(toInput.value);
+      const rate = getRate();
+
+      if (!isNaN(val) && rate) fromInput.value = formatAmount(val / rate, getFrom().value);
+      else fromInput.value = '';
+      isUpdating = false;
+    }
+
+    function doSwap() {
+      const fromSel = getFrom(), toSel = getTo();
+      const tmp = fromSel.value;
+      fromSel.value = toSel.value;
+      toSel.value = tmp;
+      syncSelects(fromSel.id, fromSel.value);
+      syncSelects(toSel.id, toSel.value);
+      const fromIn = getFromInput(), toIn = getToInput();
+      const tmpVal = fromIn.value;
+      fromIn.value = toIn.value;
+      toIn.value = tmpVal;
+      updateLabels();
+      loadRates();
+    }
+
+    function resetValues() {
+      document.getElementById('fromAmountPC').value = '';
+      document.getElementById('toAmountPC').value = '';
+      document.getElementById('fromAmountM').value = '';
+      document.getElementById('toAmountM').value = '';
+    }
+
+    document.getElementById('fromAmountPC').addEventListener('input', convertFrom);
+    document.getElementById('toAmountPC').addEventListener('input', convertTo);
+    document.getElementById('fromAmountPC').addEventListener('blur', () => formatCurrentInput(document.getElementById('fromAmountPC'), document.getElementById('fromCurrencyPC').value));
+    document.getElementById('toAmountPC').addEventListener('blur', () => formatCurrentInput(document.getElementById('toAmountPC'), document.getElementById('toCurrencyPC').value));
+    document.getElementById('fromCurrencyPC').addEventListener('change', e => {
+      syncSelects('fromCurrencyPC', e.target.value); updateLabels(); formatInputForCurrency(getFromInput(), getFrom().value); loadRates();
+    });
+    document.getElementById('toCurrencyPC').addEventListener('change', e => {
+      syncSelects('toCurrencyPC', e.target.value); updateLabels(); updateRateInfo(); convertFrom();
+    });
+    document.getElementById('swapBtnPC').addEventListener('click', doSwap);
+
+    document.getElementById('fromAmountM').addEventListener('input', convertFrom);
+    document.getElementById('toAmountM').addEventListener('input', convertTo);
+    document.getElementById('fromAmountM').addEventListener('blur', () => formatCurrentInput(document.getElementById('fromAmountM'), document.getElementById('fromCurrencyM').value));
+    document.getElementById('toAmountM').addEventListener('blur', () => formatCurrentInput(document.getElementById('toAmountM'), document.getElementById('toCurrencyM').value));
+    document.getElementById('fromCurrencyM').addEventListener('change', e => {
+      syncSelects('fromCurrencyM', e.target.value); updateLabels(); formatInputForCurrency(getFromInput(), getFrom().value); loadRates();
+    });
+    document.getElementById('toCurrencyM').addEventListener('change', e => {
+      syncSelects('toCurrencyM', e.target.value); updateLabels(); updateRateInfo(); convertFrom();
+    });
+    document.getElementById('swapBtnM').addEventListener('click', doSwap);
+    document.getElementById('resetBtn').addEventListener('click', resetValues);
+
+    updateLabels();
+    loadRates();
+  </script>
 
 
 </body></html>
