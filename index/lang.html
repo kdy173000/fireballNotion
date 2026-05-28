@@ -67,6 +67,7 @@
       line-height: 1.2;
       text-align: center;
       text-decoration: none;
+      cursor: default;
     }
 
     .limit-note {
@@ -243,7 +244,16 @@
 
     @media (max-width: 600px) {
       .tool-panel {
-        padding: 20px 20px 22px;
+        padding: 16px 18px 18px;
+      }
+
+      .tool-title {
+        margin-bottom: 4px;
+        font-size: 21px;
+      }
+
+      .limit-note {
+        margin-bottom: 12px;
       }
 
       .language-row {
@@ -287,7 +297,7 @@
 
       textarea,
       .result-box {
-        min-height: 118px;
+        min-height: 92px;
       }
 
       .status {
@@ -302,6 +312,12 @@
       .notice {
         margin-top: 8px;
         padding-top: 8px;
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      .notice p + p {
+        margin-top: 3px;
       }
 
       .button-row {
