@@ -1,389 +1,430 @@
-<html>
-<head>
-<link rel="stylesheet" as="style" crossorigin="" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<html lang="ko"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>희석비</title>
+  <link rel="stylesheet" as="style" crossorigin="" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+
+  <style>
+    :root {
+      color-scheme: light dark;
+      --ui-font: "Pretendard", sans-serif;
+      --panel-border: #d9d9d9;
+      --divider: #e5e5e5;
+      --text-main: #111111;
+      --text-label: #444444;
+      --input-border: #cfcfcf;
+      --placeholder: #9a9a9a;
+      --button-bg: rgba(0,0,0,0.03);
+      --button-hover: rgba(0,0,0,0.06);
+      --accent: #ff3b3b;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --panel-border: #3a3a3a;
+        --divider: #444444;
+        --text-main: #f0f0f0;
+        --text-label: #aaaaaa;
+        --input-border: #444444;
+        --placeholder: #666666;
+        --button-bg: rgba(255,255,255,0.04);
+        --button-hover: rgba(255,255,255,0.08);
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--ui-font);
+      background: transparent;
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 20px;
+    }
+
+    .dilution-calculator {
+      width: 100%;
+      max-width: 800px;
+      padding: 20px 24px 24px;
+      border: 1px solid var(--panel-border);
+      border-radius: 14px;
+      background: transparent;
+    }
+
+    .calc-title {
+      margin: 0 0 18px;
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.2;
+      text-align: center;
+    }
+
+    .title-link {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .calc-body {
+      display: grid;
+      grid-template-columns: 160px 1px minmax(0, 1fr);
+      gap: 20px;
+      align-items: end;
+    }
+
+    .ratio-section,
+    .field-col {
+      min-width: 0;
+    }
+
+    .vdivider {
+      width: 1px;
+      height: 62px;
+      background: var(--divider);
+    }
+
+    .fields-section {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--text-label);
+      font-size: 13px;
+      line-height: 1.2;
+    }
+
+    .field-label-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .field-label-row label {
+      margin-bottom: 0;
+    }
+
+    .required-star {
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .ratio-input {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 8px;
+      align-items: center;
+    }
+
+    .ratio-input span {
+      color: var(--text-main);
+      font-size: 15px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid var(--input-border);
+      border-radius: 6px;
+      background: transparent;
+      color: var(--text-main);
+      font-family: var(--ui-font);
+      font-size: 15px;
+      line-height: 1.35;
+      outline: none;
+    }
+
+    input::placeholder {
+      color: var(--placeholder);
+    }
+
+    input:focus {
+      border-color: #888;
+    }
+
+    input::-webkit-inner-spin-button,
+    input::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .unit-inside {
+      display: inline-flex;
+      align-items: center;
+      height: 24px;
+      overflow: hidden;
+      border: 1px solid var(--input-border);
+      border-radius: 6px;
+      background: var(--button-bg);
+      flex-shrink: 0;
+    }
+
+    .unit-btn {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      color: var(--placeholder);
+      font-family: var(--ui-font);
+      font-size: 13px;
+      line-height: 1;
+      min-width: 32px;
+      height: 22px;
+      padding: 0 8px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .unit-btn + .unit-btn {
+      border-left: 1px solid var(--input-border);
+    }
+
+    .unit-btn:hover {
+      background: var(--button-hover);
+      color: var(--text-main);
+    }
+
+    .unit-btn.active {
+      color: var(--text-main);
+      font-weight: 700;
+    }
+
+    @media (max-width: 600px) {
+      .dilution-calculator {
+        padding: 20px 20px 22px;
+      }
+
+      .calc-title {
+        margin-bottom: 14px;
+      }
+
+      .calc-body {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .vdivider {
+        display: none;
+      }
+
+      .fields-section {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding-top: 12px;
+        border-top: 1px solid var(--divider);
+      }
+    }
+  </style>
 </head>
 
 <body>
-<div class="dilution-calculator">
-  <h2 class="calc-title">
-    <a href="https://kdy173000.github.io/fireballNotion/" class="title-link">희석비</a>
-  </h2>
+  <main class="dilution-calculator">
+    <h1 class="calc-title">
+      <a href="https://kdy173000.github.io/fireballNotion/" class="title-link">희석비</a>
+    </h1>
 
-  <div class="calc-body">
-    <div class="ratio-section">
-      <label>희석비 <span class="required-star">*</span></label>
-      <div class="ratio-input">
-        <span>1 :</span>
-        <input type="text" id="waterRatio" placeholder="10" inputmode="decimal">
-      </div>
-    </div>
-
-    <div class="vdivider"></div>
-
-    <div class="fields-section">
-      <div class="field-col">
-        <div class="field-label-row">
-          <label>총 용량</label>
-          <div class="unit-inside" data-target="totalAmount">
-            <button type="button" class="unit-btn active" data-unit="ml">ml</button>
-            <button type="button" class="unit-btn" data-unit="L">L</button>
-          </div>
+    <div class="calc-body">
+      <div class="ratio-section">
+        <label for="waterRatio">희석비 <span class="required-star">*</span></label>
+        <div class="ratio-input">
+          <span>1 :</span>
+          <input type="text" id="waterRatio" placeholder="10" inputmode="decimal">
         </div>
-        <input type="text" id="totalAmount" placeholder="" inputmode="decimal">
       </div>
 
-      <div class="field-col">
-  <div class="field-label-row">
-    <label>물</label>
-    <div class="unit-inside" data-target="waterAmount">
-      <button type="button" class="unit-btn active" data-unit="ml">ml</button>
-      <button type="button" class="unit-btn" data-unit="L">L</button>
+      <div class="vdivider"></div>
+
+      <div class="fields-section">
+        <div class="field-col">
+          <div class="field-label-row">
+            <label for="totalAmount">총 용량</label>
+            <div class="unit-inside" data-target="totalAmount">
+              <button type="button" class="unit-btn active" data-unit="ml">ml</button>
+              <button type="button" class="unit-btn" data-unit="L">L</button>
+            </div>
+          </div>
+          <input type="text" id="totalAmount" inputmode="decimal">
+        </div>
+
+        <div class="field-col">
+          <div class="field-label-row">
+            <label for="waterAmount">물</label>
+            <div class="unit-inside" data-target="waterAmount">
+              <button type="button" class="unit-btn active" data-unit="ml">ml</button>
+              <button type="button" class="unit-btn" data-unit="L">L</button>
+            </div>
+          </div>
+          <input type="text" id="waterAmount" inputmode="decimal">
+        </div>
+
+        <div class="field-col">
+          <div class="field-label-row">
+            <label for="shampooAmount">원액</label>
+            <div class="unit-inside" data-target="shampooAmount">
+              <button type="button" class="unit-btn active" data-unit="ml">ml</button>
+              <button type="button" class="unit-btn" data-unit="L">L</button>
+            </div>
+          </div>
+          <input type="text" id="shampooAmount" inputmode="decimal">
+        </div>
+      </div>
     </div>
-  </div>
-  <input type="text" id="waterAmount" placeholder="" inputmode="decimal">
-</div>
+  </main>
 
-<div class="field-col">
-  <div class="field-label-row">
-    <label>원액</label>
-    <div class="unit-inside" data-target="shampooAmount">
-      <button type="button" class="unit-btn active" data-unit="ml">ml</button>
-      <button type="button" class="unit-btn" data-unit="L">L</button>
-    </div>
-  </div>
-  <input type="text" id="shampooAmount" placeholder="" inputmode="decimal">
-</div>
-</div>
+  <script>
+    const waterRatioEl = document.getElementById("waterRatio");
+    const totalAmountEl = document.getElementById("totalAmount");
+    const waterAmountEl = document.getElementById("waterAmount");
+    const shampooAmountEl = document.getElementById("shampooAmount");
 
-<style>
-:root {
-  color-scheme: light dark;
-  --ui-font: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-  --calc-border: #d9d9d9;
-  --divider: #e5e5e5;
-  --text-main: #111111;
-  --text-sub: #444444;
-  --input-bg: transparent;
-  --input-border: #cfcfcf;
-  --placeholder: #9a9a9a;
-}
+    const units = { totalAmount: "ml", waterAmount: "ml", shampooAmount: "ml" };
+    const rawMl = { totalAmount: NaN, waterAmount: NaN, shampooAmount: NaN };
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --calc-border: #6b6b6b;
-    --divider: #555555;
-    --text-main: #f5f5f5;
-    --text-sub: #d6d6d6;
-    --input-bg: transparent;
-    --input-border: #666666;
-    --placeholder: #9b9b9b;
-  }
-}
+    let isUpdating = false;
 
-.dilution-calculator {
-  font-family: var(--ui-font);
-  border: 1px solid var(--calc-border);
-  border-radius: 14px;
-  padding: 20px 28px;
-  max-width: 760px;
-  margin: auto;
-  background: transparent;
-  color: var(--text-main);
-  box-sizing: border-box;
-}
+    function parseNumber(value) {
+      if (value == null) return NaN;
+      let s = String(value).trim();
+      if (s === "") return NaN;
 
-.calc-title {
-  text-align: center;
-  margin: 0 0 18px;
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--text-main);
-}
+      if (/\d,\d/.test(s) && !/\d\.\d/.test(s)) {
+        s = s.replace(/\./g, "").replace(",", ".");
+      } else {
+        s = s.replace(/,/g, "");
+      }
 
-.title-link {
-  color: inherit;
-  text-decoration: none;
-  cursor: pointer;
-  background: none;
-  border: none;
-  padding: 0;
-  font: inherit;
-}
+      return parseFloat(s);
+    }
 
-.title-link:hover { cursor: pointer; }
+    function formatNumber(value) {
+      if (!isFinite(value)) return "";
+      const rounded = Math.round(value * 100) / 100;
+      return rounded.toLocaleString("ko-KR", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+      });
+    }
 
-.calc-body {
-  display: flex;
-  align-items: center;
-  gap: 0;
-}
+    function toMl(fieldId, value) {
+      if (!isFinite(value)) return NaN;
+      return units[fieldId] === "L" ? value * 1000 : value;
+    }
 
-.ratio-section {
-  flex-shrink: 0;
-  width: 150px;
-}
+    function fromMl(fieldId, ml) {
+      if (!isFinite(ml)) return NaN;
+      return units[fieldId] === "L" ? ml / 1000 : ml;
+    }
 
-.vdivider {
-  width: 1px;
-  height: 64px;
-  background: var(--divider);
-  margin: 0 20px;
-  flex-shrink: 0;
-}
+    function setField(el, fieldId, ml) {
+      rawMl[fieldId] = ml;
+      el.value = isFinite(ml) ? formatNumber(fromMl(fieldId, ml)) : "";
+    }
 
-.fields-section {
-  flex: 1;
-  display: flex;
-  gap: 12px;
-}
+    function clearField(el, fieldId) {
+      rawMl[fieldId] = NaN;
+      el.value = "";
+    }
 
-.field-col {
-  flex: 1;
-  min-width: 0;
-}
+    function getRatio() {
+      const r = parseNumber(waterRatioEl.value);
+      return isFinite(r) && r >= 0 ? r : NaN;
+    }
 
-label {
-  display: block;
-  color: var(--text-sub);
-  font-weight: 500;
-  margin-bottom: 4px;
-  font-size: 14px;
-}
+    function recalcFrom(source) {
+      const ratio = getRatio();
+      if (isNaN(ratio)) return;
 
-.field-label-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 4px;
-}
+      const ml = rawMl[source];
+      if (!isFinite(ml) || ml < 0) return;
 
-.field-label-row label {
-  margin-bottom: 0;
-}
+      let totalMl, waterMl, shampooMl;
 
-.ratio-input {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+      if (source === "totalAmount") {
+        totalMl = ml;
+        shampooMl = totalMl / (1 + ratio);
+        waterMl = totalMl - shampooMl;
+      } else if (source === "waterAmount") {
+        waterMl = ml;
+        shampooMl = ratio > 0 ? waterMl / ratio : 0;
+        totalMl = shampooMl + waterMl;
+      } else {
+        shampooMl = ml;
+        waterMl = shampooMl * ratio;
+        totalMl = shampooMl + waterMl;
+      }
 
-.ratio-input span {
-  font-size: 17px;
-  font-weight: 700;
-  color: var(--text-main);
-  white-space: nowrap;
-}
-
-.required-star {
-  color: #e03131 !important;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-input {
-  width: 100%;
-  padding: 9px 10px;
-  margin: 0;
-  border-radius: 6px;
-  border: 1px solid var(--input-border);
-  font-size: 15px;
-  font-family: var(--ui-font);
-  background: var(--input-bg);
-  color: var(--text-main);
-  box-sizing: border-box;
-  outline: none;
-}
-
-input::placeholder { color: var(--placeholder); }
-
-input::-webkit-inner-spin-button,
-input::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.unit-inside {
-  display: inline-flex;
-  align-items: center;
-}
-
-.unit-btn {
-  appearance: none;
-  border: none;
-  background: transparent;
-  color: var(--text-sub);
-  font-family: var(--ui-font);
-  font-size: 12px;
-  font-weight: 500;
-  padding: 0 7px;
-  height: 22px;
-  cursor: pointer;
-  line-height: 1;
-}
-
-.unit-btn + .unit-btn {
-  border-left: 1px solid var(--input-border);
-}
-
-.unit-btn.active {
-  color: var(--text-main);
-  font-weight: 700;
-}
-
-@media (max-width: 600px) {
-  .dilution-calculator { padding: 17px; }
-  .calc-title { font-size: 22px; margin-bottom: 14px; margin-top: 0; }
-  .calc-body { flex-direction: column; align-items: stretch; gap: 0; }
-  .ratio-section { width: 100%; }
-  .vdivider { display: none; }
-  .fields-section { flex-direction: column; gap: 0; margin-top: 16px; border-top: 1px solid var(--divider); padding-top: 14px; }
-  .field-col { margin-bottom: 10px; }
-  label { font-size: 15px; }
-  input { font-size: 15px; }
-}
-</style>
-
-<script>
-const waterRatioEl    = document.getElementById("waterRatio");
-const totalAmountEl   = document.getElementById("totalAmount");
-const waterAmountEl   = document.getElementById("waterAmount");
-const shampooAmountEl = document.getElementById("shampooAmount");
-
-const units = { totalAmount: "ml", waterAmount: "ml", shampooAmount: "ml" };
-const rawMl = { totalAmount: NaN, waterAmount: NaN, shampooAmount: NaN };
-
-let isUpdating = false;
-
-function parseNumber(value) {
-  if (value == null) return NaN;
-  let s = String(value).trim();
-  if (s === "") return NaN;
-
-  if (/\d,\d/.test(s) && !/\d\.\d/.test(s)) {
-    s = s.replace(/\./g, "").replace(",", ".");
-  } else {
-    s = s.replace(/,/g, "");
-  }
-
-  return parseFloat(s);
-}
-
-function formatNumber(value) {
-  if (!isFinite(value)) return "";
-  const rounded = Math.round(value * 100) / 100;
-  return rounded.toLocaleString("ko-KR", {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 2
-  });
-}
-
-function toMl(fieldId, value) {
-  if (!isFinite(value)) return NaN;
-  return units[fieldId] === "L" ? value * 1000 : value;
-}
-
-function fromMl(fieldId, ml) {
-  if (!isFinite(ml)) return NaN;
-  return units[fieldId] === "L" ? ml / 1000 : ml;
-}
-
-function setField(el, fieldId, ml) {
-  rawMl[fieldId] = ml;
-  el.value = isFinite(ml) ? formatNumber(fromMl(fieldId, ml)) : "";
-}
-
-function clearField(el, fieldId) {
-  rawMl[fieldId] = NaN;
-  el.value = "";
-}
-
-function getRatio() {
-  const r = parseNumber(waterRatioEl.value);
-  return isFinite(r) && r >= 0 ? r : NaN;
-}
-
-function recalcFrom(source) {
-  const ratio = getRatio();
-  if (isNaN(ratio)) return;
-
-  const ml = rawMl[source];
-  if (!isFinite(ml) || ml < 0) return;
-
-  let totalMl, waterMl, shampooMl;
-
-  if (source === "totalAmount") {
-    totalMl = ml;
-    shampooMl = totalMl / (1 + ratio);
-    waterMl = totalMl - shampooMl;
-  } else if (source === "waterAmount") {
-    waterMl = ml;
-    shampooMl = ratio > 0 ? waterMl / ratio : 0;
-    totalMl = shampooMl + waterMl;
-  } else {
-    shampooMl = ml;
-    waterMl = shampooMl * ratio;
-    totalMl = shampooMl + waterMl;
-  }
-
-  isUpdating = true;
-
-  if (source !== "totalAmount") setField(totalAmountEl, "totalAmount", totalMl);
-  if (source !== "waterAmount") setField(waterAmountEl, "waterAmount", waterMl);
-  if (source !== "shampooAmount") setField(shampooAmountEl, "shampooAmount", shampooMl);
-
-  isUpdating = false;
-}
-
-waterRatioEl.addEventListener("input", () => {
-  if (isUpdating) return;
-
-  const source = ["totalAmount", "waterAmount", "shampooAmount"].find(id => isFinite(rawMl[id]));
-  if (source) recalcFrom(source);
-});
-
-function handleFieldInput(el, fieldId) {
-  el.addEventListener("input", () => {
-    if (isUpdating) return;
-
-    const ml = toMl(fieldId, parseNumber(el.value));
-    rawMl[fieldId] = ml;
-
-    if (isFinite(ml) && ml >= 0) {
-      recalcFrom(fieldId);
-    } else {
       isUpdating = true;
-      ["totalAmount", "waterAmount", "shampooAmount"]
-        .filter(id => id !== fieldId)
-        .forEach(id => clearField(document.getElementById(id), id));
+
+      if (source !== "totalAmount") setField(totalAmountEl, "totalAmount", totalMl);
+      if (source !== "waterAmount") setField(waterAmountEl, "waterAmount", waterMl);
+      if (source !== "shampooAmount") setField(shampooAmountEl, "shampooAmount", shampooMl);
+
       isUpdating = false;
     }
-  });
-}
 
-handleFieldInput(totalAmountEl, "totalAmount");
-handleFieldInput(waterAmountEl, "waterAmount");
-handleFieldInput(shampooAmountEl, "shampooAmount");
+    waterRatioEl.addEventListener("input", () => {
+      if (isUpdating) return;
 
-document.querySelectorAll(".unit-inside").forEach(toggle => {
-  const targetId = toggle.dataset.target;
-  const inputEl = document.getElementById(targetId);
-
-  toggle.querySelectorAll(".unit-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const newUnit = btn.dataset.unit;
-      if (newUnit === units[targetId]) return;
-
-      units[targetId] = newUnit;
-
-      toggle.querySelectorAll(".unit-btn").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-
-      if (isFinite(rawMl[targetId])) {
-        inputEl.value = formatNumber(fromMl(targetId, rawMl[targetId]));
-      }
+      const source = ["totalAmount", "waterAmount", "shampooAmount"].find(id => isFinite(rawMl[id]));
+      if (source) recalcFrom(source);
     });
-  });
-});
-</script>
-</body>
-</html>
+
+    function handleFieldInput(el, fieldId) {
+      el.addEventListener("input", () => {
+        if (isUpdating) return;
+
+        const ml = toMl(fieldId, parseNumber(el.value));
+        rawMl[fieldId] = ml;
+
+        if (isFinite(ml) && ml >= 0) {
+          recalcFrom(fieldId);
+        } else {
+          isUpdating = true;
+          ["totalAmount", "waterAmount", "shampooAmount"]
+            .filter(id => id !== fieldId)
+            .forEach(id => clearField(document.getElementById(id), id));
+          isUpdating = false;
+        }
+      });
+    }
+
+    handleFieldInput(totalAmountEl, "totalAmount");
+    handleFieldInput(waterAmountEl, "waterAmount");
+    handleFieldInput(shampooAmountEl, "shampooAmount");
+
+    document.querySelectorAll(".unit-inside").forEach(toggle => {
+      const targetId = toggle.dataset.target;
+      const inputEl = document.getElementById(targetId);
+
+      toggle.querySelectorAll(".unit-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const newUnit = btn.dataset.unit;
+          if (newUnit === units[targetId]) return;
+
+          units[targetId] = newUnit;
+
+          toggle.querySelectorAll(".unit-btn").forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+
+          if (isFinite(rawMl[targetId])) {
+            inputEl.value = formatNumber(fromMl(targetId, rawMl[targetId]));
+          }
+        });
+      });
+    });
+  </script>
+
+
+</body></html>
