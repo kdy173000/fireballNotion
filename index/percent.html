@@ -1,191 +1,325 @@
 <html lang="ko"><head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>변화율 계산기</title>
+  <title>퍼센트 계산기</title>
   <link rel="stylesheet" as="style" crossorigin="" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+
+  <style>
+    :root {
+      color-scheme: light dark;
+      --ui-font: "Pretendard", sans-serif;
+      --bg-page: transparent;
+      --bg-card: transparent;
+      --calc-border: #d9d9d9;
+      --text-main: #111;
+      --text-sub: #444;
+      --input-border: #cfcfcf;
+      --placeholder: #9a9a9a;
+      --button-bg: rgba(0,0,0,0.03);
+      --button-hover: rgba(0,0,0,0.06);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-page: transparent;
+        --bg-card: transparent;
+        --calc-border: #3a3a3a;
+        --text-main: #f0f0f0;
+        --text-sub: #aaaaaa;
+        --input-border: #444444;
+        --placeholder: #666666;
+        --button-bg: rgba(255,255,255,0.04);
+        --button-hover: rgba(255,255,255,0.08);
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--ui-font);
+      background: var(--bg-page);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 20px;
+    }
+
+    .percent-calculator {
+      width: 100%;
+      max-width: 800px;
+      padding: 20px 24px 24px;
+      border: 1px solid var(--calc-border);
+      border-radius: 14px;
+      background: var(--bg-card);
+      color: var(--text-main);
+      font-family: var(--ui-font);
+    }
+
+    .calc-title {
+      margin: 0 0 14px;
+      color: var(--text-main);
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.2;
+      text-align: center;
+    }
+
+    .title-link {
+      color: inherit;
+      text-decoration: none;
+      cursor: default;
+    }
+
+    .mode-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .mode-btn {
+      min-height: 34px;
+      padding: 7px 10px;
+      border: 1px solid var(--input-border);
+      border-radius: 6px;
+      background: var(--button-bg);
+      color: var(--placeholder);
+      font-family: var(--ui-font);
+      font-size: 15px;
+      line-height: 1.2;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+
+    .mode-btn:hover {
+      border-color: #888;
+      background: var(--button-hover);
+    }
+
+    .mode-btn.active {
+      color: var(--text-main);
+      font-weight: 700;
+    }
+
+    .fields-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .field {
+      min-width: 0;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 3px;
+      color: var(--text-sub);
+      font-size: 13px;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid var(--input-border);
+      border-radius: 6px;
+      background: transparent;
+      color: var(--text-main);
+      font-family: var(--ui-font);
+      font-size: 15px;
+      text-align: center;
+      transition: border-color 0.2s;
+    }
+
+    input::placeholder {
+      color: var(--placeholder);
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #888;
+    }
+
+    .hint {
+      margin-top: 8px;
+      color: var(--placeholder);
+      font-size: 13px;
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    @media (min-width: 600px) {
+      .fields-row {
+        flex-direction: row;
+        gap: 12px;
+      }
+
+      .field {
+        flex: 1;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .percent-calculator {
+        padding: 18px 20px 20px;
+      }
+
+      .calc-title {
+        margin-bottom: 12px;
+      }
+
+      .mode-row {
+        margin-bottom: 10px;
+      }
+    }
+  </style>
 </head>
+
 <body>
-
-<div class="percent-calculator">
-  <div class="calc-header">
-    <h2 class="calc-title">
+  <main class="percent-calculator">
+    <h1 class="calc-title">
       <a href="https://kdy173000.github.io/fireballNotion/" class="title-link">Percent</a>
-    </h2>
-  </div>
+    </h1>
 
-  <div class="fields-row">
-    <div class="field">
-      <label for="before">전</label>
-      <input type="text" id="before" class="transparent-input" placeholder="0" inputmode="decimal">
+    <div class="mode-row" role="tablist" aria-label="계산 모드">
+      <button type="button" class="mode-btn" data-mode="change">변화율</button>
+      <button type="button" class="mode-btn active" data-mode="discount">할인율</button>
     </div>
 
-    <div class="field">
-      <label for="after">후</label>
-      <input type="text" id="after" class="transparent-input" placeholder="0" inputmode="decimal">
+    <div class="fields-row">
+      <div class="field">
+        <label for="before" id="beforeLabel">정가</label>
+        <input type="text" id="before" placeholder="0" inputmode="decimal">
+      </div>
+
+      <div class="field">
+        <label for="after" id="afterLabel">할인가</label>
+        <input type="text" id="after" placeholder="0" inputmode="decimal">
+      </div>
+
+      <div class="field">
+        <label for="pct" id="pctLabel">할인율</label>
+        <input type="text" id="pct" placeholder="0" inputmode="decimal">
+      </div>
     </div>
 
-    <div class="field">
-      <label for="pct">변화율</label>
-      <input type="text" id="pct" class="transparent-input" placeholder="0" inputmode="decimal">
-    </div>
-  </div>
-</div>
+    <p class="hint" id="hintText">정가/할인율을 입력하면 할인가가 계산됩니다.</p>
+  </main>
 
-<style>
-:root {
-  color-scheme: light dark;
-  --ui-font: "Pretendard", sans-serif;
-  --bg-page: transparent;
-  --bg-card: transparent;
-  --calc-border: #d9d9d9;
-  --text-main: #111;
-  --text-sub: #444;
-  --input-bg: #ffffff;
-  --input-border: #cfcfcf;
-  --placeholder: #9a9a9a;
-}
+  <script>
+    const bEl = document.getElementById("before");
+    const aEl = document.getElementById("after");
+    const pEl = document.getElementById("pct");
+    const beforeLabel = document.getElementById("beforeLabel");
+    const afterLabel = document.getElementById("afterLabel");
+    const pctLabel = document.getElementById("pctLabel");
+    const hintText = document.getElementById("hintText");
+    const modeButtons = document.querySelectorAll(".mode-btn");
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg-page: transparent;
-    --bg-card: transparent;
-    --calc-border: #3a3a3a;
-    --text-main: #f0f0f0;
-    --text-sub: #aaaaaa;
-    --input-bg: #2e2e2e;
-    --input-border: #444444;
-    --placeholder: #666666;
-  }
-}
+    let mode = "change";
+    let isUpdating = false;
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+    function parseValue(el) {
+      return parseFloat(String(el.value).replace(/,/g, ""));
+    }
 
-body {
-  font-family: var(--ui-font);
-  background: var(--bg-page);
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 20px;
-}
+    function setNumber(el, value) {
+      if (!isFinite(value)) {
+        el.value = "";
+        return;
+      }
 
-.percent-calculator {
-  font-family: var(--ui-font);
-  background: var(--bg-card);
-  border: 1px solid var(--calc-border);
-  border-radius: 14px;
-  padding: 20px 24px 24px;
-  width: 100%;
-  max-width: 800px;
-}
+      const rounded = Math.round(value * 100) / 100;
+      el.value = rounded.toLocaleString("ko-KR", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+      });
+    }
 
-.calc-header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 18px;
-}
+    function clearValues() {
+      bEl.value = "";
+      aEl.value = "";
+      pEl.value = "";
+    }
 
-.calc-title {
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--text-main);
-}
+    function calcChange(changed) {
+      const before = parseValue(bEl);
+      const after = parseValue(aEl);
+      const percent = parseValue(pEl);
 
-.title-link {
-  color: inherit;
-  text-decoration: none;
-  cursor: default;
-}
+      if (changed === "pct" && !isNaN(before) && !isNaN(percent)) {
+        setNumber(aEl, before * (1 + percent / 100));
+        return;
+      }
 
-.fields-row {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
+      if (changed === "after" && isNaN(before) && !isNaN(after) && !isNaN(percent) && percent !== -100) {
+        setNumber(bEl, after / (1 + percent / 100));
+        return;
+      }
 
-.field {
-  min-width: 0;
-}
+      if (!isNaN(before) && !isNaN(after) && before !== 0) {
+        setNumber(pEl, ((after - before) / before) * 100);
+      }
+    }
 
-label {
-  display: block;
-  margin-bottom: 3px;
-  font-size: 13px;
-  color: var(--text-sub);
-}
+    function calcDiscount(changed) {
+      const price = parseValue(bEl);
+      const result = parseValue(aEl);
+      const discount = parseValue(pEl);
 
-input {
-  width: 100%;
-  padding: 8px 10px;
-  margin-bottom: 0;
-  border-radius: 6px;
-  border: 1px solid var(--input-border);
-  font-size: 15px;
-  font-family: var(--ui-font);
-  background: var(--input-bg);
-  color: var(--text-main);
-  text-align: center;
-  transition: background 0.2s, border-color 0.2s, color 0.2s;
-}
+      if ((changed === "before" || changed === "pct") && !isNaN(price) && !isNaN(discount)) {
+        setNumber(aEl, price * (1 - discount / 100));
+        return;
+      }
 
-input::placeholder { color: var(--placeholder); }
-input:focus { outline: none; border-color: #888; }
-.transparent-input { background: transparent; }
+      if (changed === "after" && !isNaN(price) && price !== 0 && !isNaN(result)) {
+        setNumber(pEl, (1 - result / price) * 100);
+      }
+    }
 
-@media (min-width: 600px) {
-  .fields-row {
-    flex-direction: row;
-    gap: 12px;
-  }
+    function calc(changed) {
+      if (isUpdating) return;
+      isUpdating = true;
 
-  .field {
-    flex: 1;
-  }
-}
-</style>
+      if (mode === "discount") {
+        calcDiscount(changed);
+      } else {
+        calcChange(changed);
+      }
 
-<script>
-const bEl = document.getElementById("before");
-const aEl = document.getElementById("after");
-const pEl = document.getElementById("pct");
+      isUpdating = false;
+    }
 
-function parseValue(el) {
-  return parseFloat(String(el.value).replace(/,/g, ""));
-}
+    function setMode(nextMode) {
+      mode = nextMode;
+      modeButtons.forEach(btn => btn.classList.toggle("active", btn.dataset.mode === mode));
+      clearValues();
 
-function setNumber(el, value) {
-  el.value = Number.isInteger(value) ? String(value) : value.toFixed(2);
-}
+      if (mode === "discount") {
+        beforeLabel.textContent = "정가";
+        afterLabel.textContent = "할인가";
+        pctLabel.textContent = "할인율";
+        hintText.textContent = "정가/할인율을 입력하면 할인가가 계산됩니다.";
+      } else {
+        beforeLabel.textContent = "전";
+        afterLabel.textContent = "후";
+        pctLabel.textContent = "변화율";
+        hintText.textContent = "전/후 값을 입력하면 변화율이 계산됩니다.";
+      }
+    }
 
-function calc(changed) {
-  const before = parseValue(bEl);
-  const after = parseValue(aEl);
-  const percent = parseValue(pEl);
+    bEl.addEventListener("input", () => calc("before"));
+    aEl.addEventListener("input", () => calc("after"));
+    pEl.addEventListener("input", () => calc("pct"));
 
-  if (changed === "pct" && !isNaN(before) && !isNaN(percent)) {
-    const nextAfter = before * (1 + percent / 100);
-    setNumber(aEl, nextAfter);
-    return;
-  }
-
-  if (changed === "after" && isNaN(before) && !isNaN(after) && !isNaN(percent) && percent !== -100) {
-    const nextBefore = after / (1 + percent / 100);
-    setNumber(bEl, nextBefore);
-    return;
-  }
-
-  if (!isNaN(before) && !isNaN(after) && before !== 0) {
-    const nextPercent = ((after - before) / before) * 100;
-    setNumber(pEl, nextPercent);
-  }
-}
-
-bEl.addEventListener("input", () => calc("before"));
-aEl.addEventListener("input", () => calc("after"));
-pEl.addEventListener("input", () => calc("pct"));
-</script>
-
+    modeButtons.forEach(btn => {
+      btn.addEventListener("click", () => setMode(btn.dataset.mode));
+    });
+  </script>
 
 
 </body></html>
