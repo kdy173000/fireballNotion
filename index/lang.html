@@ -1,0 +1,583 @@
+<html lang="ko"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>번역</title>
+  <link rel="stylesheet" as="style" crossorigin="" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+
+  <style>
+    :root {
+      color-scheme: light dark;
+      --ui-font: "Pretendard", sans-serif;
+      --panel-border: #d9d9d9;
+      --field-border: #cfcfcf;
+      --text-main: #111;
+      --text-label: #444;
+      --placeholder: #9a9a9a;
+      --button-bg: rgba(0,0,0,0.03);
+      --button-hover: rgba(0,0,0,0.06);
+      --result-bg: rgba(0,0,0,0.03);
+      --danger: #ff3b3b;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --panel-border: #3a3a3a;
+        --field-border: #444444;
+        --text-main: #f0f0f0;
+        --text-label: #aaaaaa;
+        --placeholder: #666666;
+        --button-bg: rgba(255,255,255,0.04);
+        --button-hover: rgba(255,255,255,0.08);
+        --result-bg: rgba(255,255,255,0.04);
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: var(--ui-font);
+      background: transparent;
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 20px;
+    }
+
+    .tool-panel {
+      width: 100%;
+      max-width: 800px;
+      padding: 20px 24px 24px;
+      border: 1px solid var(--panel-border);
+      border-radius: 14px;
+      background: transparent;
+    }
+
+    .tool-title {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--text-main);
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.2;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .limit-note {
+      margin-bottom: 18px;
+      color: var(--placeholder);
+      font-size: 13px;
+      line-height: 1.3;
+      text-align: center;
+    }
+
+    .language-row {
+      display: grid;
+      grid-template-columns: 1fr 40px 1fr;
+      gap: 10px;
+      align-items: end;
+      margin-bottom: 12px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      color: var(--text-label);
+      font-size: 13px;
+      line-height: 1.2;
+    }
+
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--field-border);
+      border-radius: 6px;
+      background: transparent;
+      color: var(--text-main);
+      font-family: var(--ui-font);
+      font-size: 15px;
+      line-height: 1.45;
+      outline: none;
+    }
+
+    select {
+      height: 38px;
+      padding: 8px 10px;
+    }
+
+    option {
+      background: #fff;
+      color: #000;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      option {
+        background: #1f1f1f;
+        color: #fff;
+      }
+    }
+
+    textarea {
+      min-height: 132px;
+      resize: vertical;
+      padding: 8px 10px;
+    }
+
+    textarea::placeholder {
+      color: var(--placeholder);
+    }
+
+    .swap-button,
+    .action-button,
+    .ghost-button {
+      border: 1px solid var(--field-border);
+      border-radius: 6px;
+      background: var(--button-bg);
+      color: var(--placeholder);
+      font-family: var(--ui-font);
+      font-size: 15px;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .swap-button:hover,
+    .action-button:hover,
+    .ghost-button:hover {
+      border-color: #888;
+      background: var(--button-hover);
+    }
+
+    .swap-button {
+      width: 40px;
+      height: 38px;
+    }
+
+    .swap-mobile {
+      display: none;
+    }
+
+    .text-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .meta-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 6px;
+      color: var(--placeholder);
+      font-size: 13px;
+      line-height: 1.3;
+    }
+
+    .hidden-meta {
+      display: none;
+    }
+
+    .result-box {
+      min-height: 132px;
+      padding: 8px 10px;
+      border: 1px solid var(--field-border);
+      border-radius: 6px;
+      background: var(--result-bg);
+      color: var(--text-main);
+      font-size: 15px;
+      line-height: 1.45;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .action-button,
+    .ghost-button {
+      min-height: 38px;
+      padding: 8px 14px;
+    }
+
+    .action-button {
+      flex: 1;
+    }
+
+    .status {
+      margin-top: 10px;
+      color: var(--placeholder);
+      font-size: 13px;
+      line-height: 1.4;
+      min-height: 18px;
+    }
+
+    .status.error {
+      color: var(--danger);
+    }
+
+    .notice {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--field-border);
+      color: var(--placeholder);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .notice p + p {
+      margin-top: 4px;
+    }
+
+    @media (max-width: 600px) {
+      .tool-panel {
+        padding: 20px 20px 22px;
+      }
+
+      .language-row {
+        grid-template-columns: 1fr 36px;
+        grid-template-areas:
+          "source swap"
+          "target swap";
+        gap: 8px;
+        align-items: stretch;
+      }
+
+      .language-row .field:first-child {
+        grid-area: source;
+      }
+
+      .language-row .field:last-child {
+        grid-area: target;
+      }
+
+      .swap-button {
+        grid-area: swap;
+        width: 36px;
+        height: auto;
+        min-height: 84px;
+        margin-top: 21px;
+        align-self: stretch;
+      }
+
+      .swap-wide {
+        display: none;
+      }
+
+      .swap-mobile {
+        display: inline;
+      }
+
+      .text-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      textarea,
+      .result-box {
+        min-height: 118px;
+      }
+
+      .status {
+        margin-top: 6px;
+        min-height: 0;
+      }
+
+      .status:empty {
+        display: none;
+      }
+
+      .notice {
+        margin-top: 8px;
+        padding-top: 8px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="tool-panel">
+    <a class="tool-title" href="https://kdy173000.github.io/fireballNotion/">번역</a>
+    <p class="limit-note">50,000자/IP당 일일 한도</p>
+
+    <div class="language-row">
+      <div class="field">
+        <label for="sourceLang">원본 언어</label>
+        <select id="sourceLang">
+          <option value="auto">자동 감지</option>
+          <option value="ko" selected="">한국어</option>
+          <option value="en">영어</option>
+          <option value="ja">일본어</option>
+          <option value="zh-CN">중국어 간체</option>
+          <option value="zh-TW">중국어 번체</option>
+          <option value="fr">프랑스어</option>
+          <option value="de">독일어</option>
+          <option value="es">스페인어</option>
+          <option value="it">이탈리아어</option>
+          <option value="vi">베트남어</option>
+          <option value="th">태국어</option>
+        </select>
+      </div>
+
+      <button class="swap-button" type="button" id="swapButton" title="언어 바꾸기">
+        <span class="swap-wide">⇄</span>
+        <span class="swap-mobile">⇅</span>
+      </button>
+
+      <div class="field">
+        <label for="targetLang">번역 언어</label>
+        <select id="targetLang">
+          <option value="ko">한국어</option>
+          <option value="en" selected="">영어</option>
+          <option value="ja">일본어</option>
+          <option value="zh-CN">중국어 간체</option>
+          <option value="zh-TW">중국어 번체</option>
+          <option value="fr">프랑스어</option>
+          <option value="de">독일어</option>
+          <option value="es">스페인어</option>
+          <option value="it">이탈리아어</option>
+          <option value="vi">베트남어</option>
+          <option value="th">태국어</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="text-grid">
+      <div class="field">
+        <label for="sourceText">원문</label>
+        <textarea id="sourceText" placeholder="번역할 문장을 입력하세요"></textarea>
+        <div class="meta-row">
+          <span id="detectedLang">감지 언어 -</span>
+          <span id="charCount">0자</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="resultText">번역 결과</label>
+        <div class="result-box" id="resultText">번역 결과가 여기에 표시됩니다.</div>
+        <div class="meta-row">
+          <span id="usageCount">해당 PC에서 사용한 글자 수 0 bytes</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="button-row">
+      <button class="action-button" type="button" id="translateButton">번역하기</button>
+      <button class="ghost-button" type="button" id="clearButton">초기화</button>
+    </div>
+
+    <p class="status" id="statusText"></p>
+
+    <div class="notice">
+      <p>비즈니스 메일처럼 정확도가 중요한 문장은 Google 번역이나 Papago로 한 번 더 확인하세요.</p>
+      <p>해당 번역기는 한 번 요청에 UTF-8 기준 500 bytes까지 처리합니다. 대략 한글 160자, 영어 500자 정도이며 긴 글은 자동으로 나눠 번역합니다.</p>
+    </div>
+  </main>
+
+  <script>
+    const contactEmail = "info@fireballkorea.com";
+    const dailyLimit = 50000;
+    const storageKey = "fireballTranslatorUsedBytes";
+    const sourceLang = document.getElementById("sourceLang");
+    const targetLang = document.getElementById("targetLang");
+    const sourceText = document.getElementById("sourceText");
+    const resultText = document.getElementById("resultText");
+    const charCount = document.getElementById("charCount");
+    const usageCount = document.getElementById("usageCount");
+    const detectedLang = document.getElementById("detectedLang");
+    const statusText = document.getElementById("statusText");
+    const translateButton = document.getElementById("translateButton");
+    const swapButton = document.getElementById("swapButton");
+    const clearButton = document.getElementById("clearButton");
+
+    function todayKey() {
+      return new Date().toISOString().slice(0, 10);
+    }
+
+    function loadUsedBytes() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(storageKey));
+        if (saved && saved.date === todayKey()) return saved.bytes || 0;
+      } catch (error) {
+        return 0;
+      }
+      return 0;
+    }
+
+    function saveUsedBytes(bytes) {
+      localStorage.setItem(storageKey, JSON.stringify({
+        date: todayKey(),
+        bytes
+      }));
+    }
+
+    function updateUsageDisplay() {
+      usageCount.textContent = `해당 PC에서 사용한 글자 수 ${loadUsedBytes().toLocaleString()} bytes`;
+    }
+
+    function setStatus(message, isError = false) {
+      statusText.textContent = message;
+      statusText.classList.toggle("error", isError);
+    }
+
+    function detectLanguage(text) {
+      if (/[가-힣]/.test(text)) return "ko";
+      if (/[\u3040-\u30ff]/.test(text)) return "ja";
+      if (/[\u4e00-\u9fff]/.test(text)) return "zh-CN";
+      if (/[àâçéèêëîïôûùüÿñæœ]/i.test(text)) return "fr";
+      if (/[äöüß]/i.test(text)) return "de";
+      if (/[áéíóúñü¿¡]/i.test(text)) return "es";
+      return "en";
+    }
+
+    function getLanguageName(code) {
+      const option = document.querySelector(`#targetLang option[value="${code}"], #sourceLang option[value="${code}"]`);
+      return option ? option.textContent : code;
+    }
+
+    function byteLength(text) {
+      return new TextEncoder().encode(text).length;
+    }
+
+    function splitByBytes(text, limit = 450) {
+      const chunks = [];
+      let current = "";
+
+      for (const char of text) {
+        if (byteLength(current + char) > limit) {
+          chunks.push(current);
+          current = char;
+        } else {
+          current += char;
+        }
+      }
+
+      if (current) chunks.push(current);
+      return chunks;
+    }
+
+    async function translateChunk(text, from, to) {
+      const params = new URLSearchParams({
+        q: text,
+        langpair: `${from}|${to}`,
+        de: contactEmail
+      });
+      const url = `https://api.mymemory.translated.net/get?${params.toString()}`;
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error("번역 서버 응답이 불안정합니다.");
+      }
+
+      const data = await response.json();
+      if (data.quotaFinished) {
+        throw new Error("오늘 MyMemory 무료 번역 한도를 모두 사용했습니다.");
+      }
+
+      if (data.responseStatus && Number(data.responseStatus) >= 400) {
+        throw new Error(data.responseDetails || "번역에 실패했습니다.");
+      }
+
+      return data.responseData && data.responseData.translatedText
+        ? data.responseData.translatedText
+        : "";
+    }
+
+    async function translateText() {
+      const text = sourceText.value.trim();
+      const source = sourceLang.value === "auto" ? detectLanguage(text) : sourceLang.value;
+      const target = targetLang.value;
+
+      if (!text) {
+        setStatus("번역할 문장을 입력하세요.", true);
+        return;
+      }
+
+      if (source === target) {
+        setStatus("원본 언어와 번역 언어가 같습니다.", true);
+        return;
+      }
+
+      translateButton.disabled = true;
+      translateButton.textContent = "번역 중";
+      resultText.textContent = "";
+      detectedLang.textContent = `감지 언어 ${getLanguageName(source)}`;
+      setStatus("번역하고 있습니다.");
+
+      try {
+        const chunks = splitByBytes(text);
+        const translated = [];
+
+        for (const chunk of chunks) {
+          translated.push(await translateChunk(chunk, source, target));
+        }
+
+        resultText.textContent = translated.join("");
+        saveUsedBytes(loadUsedBytes() + byteLength(text));
+        updateUsageDisplay();
+        setStatus("번역이 완료되었습니다.");
+      } catch (error) {
+        resultText.textContent = "번역 결과가 여기에 표시됩니다.";
+        setStatus(error.message || "번역 중 오류가 발생했습니다.", true);
+      } finally {
+        translateButton.disabled = false;
+        translateButton.textContent = "번역하기";
+      }
+    }
+
+    sourceText.addEventListener("input", () => {
+      const count = sourceText.value.length;
+      charCount.textContent = `${count.toLocaleString()}자`;
+      updateUsageDisplay();
+    });
+
+    translateButton.addEventListener("click", translateText);
+
+    sourceText.addEventListener("keydown", (event) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+        translateText();
+      }
+    });
+
+    swapButton.addEventListener("click", () => {
+      if (sourceLang.value !== "auto") {
+        const previousSource = sourceLang.value;
+        sourceLang.value = targetLang.value;
+        targetLang.value = previousSource;
+      }
+
+      if (resultText.textContent && resultText.textContent !== "번역 결과가 여기에 표시됩니다.") {
+        const previousText = sourceText.value;
+        sourceText.value = resultText.textContent;
+        resultText.textContent = previousText || "번역 결과가 여기에 표시됩니다.";
+        charCount.textContent = `${sourceText.value.length.toLocaleString()}자`;
+        updateUsageDisplay();
+      }
+    });
+
+    clearButton.addEventListener("click", () => {
+      sourceText.value = "";
+      resultText.textContent = "번역 결과가 여기에 표시됩니다.";
+      detectedLang.textContent = "감지 언어 -";
+      charCount.textContent = "0자";
+      updateUsageDisplay();
+      setStatus("");
+      sourceText.focus();
+    });
+
+    updateUsageDisplay();
+  </script>
+
+
+</body></html>
