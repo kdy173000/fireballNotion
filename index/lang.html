@@ -183,6 +183,10 @@
       line-height: 1.3;
     }
 
+    .usage-meta {
+      display: none;
+    }
+
     .hidden-meta {
       display: none;
     }
@@ -200,16 +204,21 @@
       word-break: break-word;
     }
 
+    .result-box.is-placeholder {
+      color: var(--placeholder);
+    }
+
     .button-row {
       display: flex;
       gap: 8px;
-      margin-top: 14px;
+      margin-top: 8px;
     }
 
     .action-button,
     .ghost-button {
       min-height: 38px;
-      padding: 8px 14px;
+      padding: 7px 14px;
+      line-height: 1.2;
       white-space: nowrap;
     }
 
@@ -218,11 +227,15 @@
     }
 
     .status {
-      margin-top: 10px;
+      margin-top: 6px;
       color: var(--placeholder);
       font-size: 13px;
       line-height: 1.4;
       min-height: 18px;
+    }
+
+    .status:empty {
+      display: none;
     }
 
     .status.error {
@@ -230,8 +243,8 @@
     }
 
     .notice {
-      margin-top: 12px;
-      padding-top: 12px;
+      margin-top: 8px;
+      padding-top: 8px;
       border-top: 1px solid var(--field-border);
       color: var(--placeholder);
       font-size: 13px;
@@ -320,16 +333,21 @@
         margin-top: 3px;
       }
 
+      #usageCount {
+        display: none;
+      }
+
       .button-row {
         gap: 6px;
-        margin-top: 10px;
+        margin-top: 6px;
       }
 
       .action-button,
       .ghost-button {
         min-height: 34px;
-        padding: 7px 10px;
+        padding: 6px 10px;
         font-size: 14px;
+        line-height: 1.2;
       }
     }
   </style>
@@ -394,9 +412,9 @@
 
       <div class="field">
         <label for="resultText">번역 결과</label>
-        <div class="result-box" id="resultText">번역 결과가 여기에 표시됩니다.</div>
-        <div class="meta-row">
-          <span id="usageCount">해당 PC에서 사용한 글자 수 0 bytes</span>
+        <div class="result-box is-placeholder" id="resultText" data-placeholder="true">이 브라우저에서 오늘 번역한 글자수 0bytes</div>
+        <div class="meta-row usage-meta">
+          <span id="usageCount">이 브라우저에서 오늘 번역한 글자수 0bytes</span>
         </div>
       </div>
     </div>
@@ -429,6 +447,7 @@
     const translateButton = document.getElementById("translateButton");
     const swapButton = document.getElementById("swapButton");
     const clearButton = document.getElementById("clearButton");
+    const mobileQuery = window.matchMedia("(max-width: 600px)");
 
     function todayKey() {
       return new Date().toISOString().slice(0, 10);
@@ -452,7 +471,22 @@
     }
 
     function updateUsageDisplay() {
-      usageCount.textContent = `해당 PC에서 사용한 글자 수 ${loadUsedBytes().toLocaleString()} bytes`;
+      const message = `이 브라우저에서 오늘 번역한 글자수 ${loadUsedBytes().toLocaleString()}bytes`;
+      usageCount.textContent = message;
+
+      if (resultText.dataset.placeholder === "true") {
+        resultText.textContent = getResultPlaceholder();
+      }
+    }
+
+    function getResultPlaceholder() {
+      return `이 브라우저에서 오늘 번역한 글자수 ${loadUsedBytes().toLocaleString()}bytes`;
+    }
+
+    function showResultPlaceholder() {
+      resultText.dataset.placeholder = "true";
+      resultText.classList.add("is-placeholder");
+      resultText.textContent = getResultPlaceholder();
     }
 
     function setStatus(message, isError = false) {
@@ -541,6 +575,8 @@
       translateButton.disabled = true;
       translateButton.textContent = "번역 중";
       resultText.textContent = "";
+      resultText.dataset.placeholder = "false";
+      resultText.classList.remove("is-placeholder");
       detectedLang.textContent = `감지 언어 ${getLanguageName(source)}`;
       setStatus("번역하고 있습니다.");
 
@@ -552,12 +588,14 @@
           translated.push(await translateChunk(chunk, source, target));
         }
 
+        resultText.dataset.placeholder = "false";
+        resultText.classList.remove("is-placeholder");
         resultText.textContent = translated.join("");
         saveUsedBytes(loadUsedBytes() + byteLength(text));
         updateUsageDisplay();
         setStatus("번역이 완료되었습니다.");
       } catch (error) {
-        resultText.textContent = "번역 결과가 여기에 표시됩니다.";
+        showResultPlaceholder();
         setStatus(error.message || "번역 중 오류가 발생했습니다.", true);
       } finally {
         translateButton.disabled = false;
@@ -586,10 +624,16 @@
         targetLang.value = previousSource;
       }
 
-      if (resultText.textContent && resultText.textContent !== "번역 결과가 여기에 표시됩니다.") {
+      if (resultText.dataset.placeholder !== "true" && resultText.textContent) {
         const previousText = sourceText.value;
         sourceText.value = resultText.textContent;
-        resultText.textContent = previousText || "번역 결과가 여기에 표시됩니다.";
+        if (previousText) {
+          resultText.dataset.placeholder = "false";
+          resultText.classList.remove("is-placeholder");
+          resultText.textContent = previousText;
+        } else {
+          showResultPlaceholder();
+        }
         charCount.textContent = `${sourceText.value.length.toLocaleString()}자`;
         updateUsageDisplay();
       }
@@ -597,7 +641,7 @@
 
     clearButton.addEventListener("click", () => {
       sourceText.value = "";
-      resultText.textContent = "번역 결과가 여기에 표시됩니다.";
+      showResultPlaceholder();
       detectedLang.textContent = "감지 언어 -";
       charCount.textContent = "0자";
       updateUsageDisplay();
@@ -605,6 +649,13 @@
       sourceText.focus();
     });
 
+    mobileQuery.addEventListener("change", () => {
+      if (resultText.dataset.placeholder === "true") {
+        showResultPlaceholder();
+      }
+    });
+
+    showResultPlaceholder();
     updateUsageDisplay();
   </script>
 
