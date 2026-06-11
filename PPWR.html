@@ -222,50 +222,35 @@
       }
 
       .count-grid {
+        display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 6px;
       }
 
       .count-tile {
-        min-height: 44px;
+        min-height: 48px;
         padding: 7px 4px;
+        border: 1px solid var(--field-border);
+        border-radius: 6px;
+        background: var(--tile-bg);
+        text-align: center;
       }
 
       .count-value {
+        display: block;
         font-size: 19px;
       }
 
       .count-label {
+        display: block;
         margin-top: 3px;
         font-size: 11px;
       }
 
       .count-tile:first-child {
+        display: block;
         grid-column: 1 / -1;
-        display: flex;
-        flex-direction: column;
-        justify-self: center;
-        align-items: center;
-        justify-content: center;
-        gap: 0;
-        min-height: 44px;
-        width: auto;
-        min-width: 88px;
-        padding: 7px 12px;
-        border-color: var(--field-border);
-        background: var(--tile-bg);
-      }
-
-      .count-tile:first-child .count-label {
-        order: 2;
-        margin-top: 3px;
-        color: var(--text-label);
-        font-size: 11px;
-      }
-
-      .count-tile:first-child .count-value {
-        order: 1;
-        font-size: 19px;
+        width: 100%;
       }
 
       .info-row {
@@ -339,11 +324,11 @@
         <span class="count-label">Hours</span>
       </div>
       <div class="count-tile">
-        <span class="count-value" id="minutes">44</span>
+        <span class="count-value" id="minutes">37</span>
         <span class="count-label">Minutes</span>
       </div>
       <div class="count-tile">
-        <span class="count-value" id="seconds">44</span>
+        <span class="count-value" id="seconds">00</span>
         <span class="count-label">Seconds</span>
       </div>
     </div>
@@ -357,7 +342,7 @@
         </div>
         <div class="progress-line">
           <div class="progress-track" aria-label="PPWR 적용 준비 진행률">
-            <div class="progress-fill" id="progressFill" style="width: 88.7122%;"></div>
+            <div class="progress-fill" id="progressFill" style="width: 88.7132%;"></div>
           </div>
           <span class="progress-percent" id="progressText">88.7%</span>
         </div>
