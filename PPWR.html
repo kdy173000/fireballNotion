@@ -49,7 +49,7 @@
     .countdown-panel {
       width: 100%;
       max-width: 800px;
-      padding: 20px 24px 24px;
+      padding: 18px 24px 20px;
       border: 1px solid var(--panel-border);
       border-radius: 14px;
       background: transparent;
@@ -68,7 +68,7 @@
     }
 
     .target-line {
-      margin-bottom: 16px;
+      margin-bottom: 12px;
       color: var(--placeholder);
       font-size: 13px;
       line-height: 1.4;
@@ -82,8 +82,8 @@
     }
 
     .count-tile {
-      min-height: 74px;
-      padding: 12px 8px;
+      min-height: 62px;
+      padding: 9px 8px;
       border: 1px solid var(--field-border);
       border-radius: 6px;
       background: var(--tile-bg);
@@ -93,7 +93,7 @@
     .count-value {
       display: block;
       color: var(--text-main);
-      font-size: 28px;
+      font-size: 24px;
       font-weight: 700;
       line-height: 1.1;
       font-variant-numeric: tabular-nums;
@@ -101,36 +101,70 @@
 
     .count-label {
       display: block;
-      margin-top: 6px;
+      margin-top: 4px;
       color: var(--text-label);
       font-size: 13px;
       line-height: 1.2;
     }
 
     .progress-wrap {
-      margin-top: 14px;
+      margin-top: 10px;
+    }
+
+    .progress-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+      margin-top: 10px;
     }
 
     .progress-wrap + .progress-wrap {
-      margin-top: 12px;
+      position: relative;
     }
 
-    .milestone-title {
-      margin-bottom: 6px;
-      color: var(--text-label);
-      font-size: 13px;
-      line-height: 1.35;
-      text-align: center;
+    .progress-wrap + .progress-wrap::before {
+      content: "";
+      position: absolute;
+      top: 3px;
+      bottom: 3px;
+      left: -10px;
+      width: 1px;
+      background: var(--field-border);
     }
 
     .progress-meta {
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
       gap: 10px;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
+      color: var(--placeholder);
+      font-size: 12px;
+      line-height: 1.3;
+    }
+
+    .milestone-title {
+      color: var(--text-label);
+      font-size: 13px;
+      line-height: 1.25;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .progress-line {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .progress-percent {
+      min-width: 44px;
       color: var(--placeholder);
       font-size: 13px;
-      line-height: 1.3;
+      line-height: 1;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
     }
 
     .progress-track {
@@ -166,7 +200,7 @@
     }
 
     .status {
-      margin-top: 10px;
+      margin-top: 8px;
       color: var(--placeholder);
       font-size: 13px;
       line-height: 1.4;
@@ -215,6 +249,51 @@
       .progress-wrap {
         margin-top: 10px;
       }
+
+      .progress-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .progress-wrap + .progress-wrap::before {
+        display: none;
+      }
+
+      .progress-meta {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 44px;
+        gap: 6px;
+        margin-bottom: 4px;
+      }
+
+      .milestone-title {
+        display: block;
+        grid-column: 1 / -1;
+        grid-row: 1;
+        width: 100%;
+        text-align: center;
+        white-space: normal;
+      }
+
+      .progress-meta span:not(.milestone-title) {
+        grid-row: 2;
+      }
+
+      .progress-meta span:not(.milestone-title):first-child {
+        grid-column: 1;
+        justify-self: start;
+      }
+
+      .progress-meta span:not(.milestone-title):last-child {
+        grid-column: 1;
+        justify-self: end;
+      }
+
+      .progress-line {
+        grid-template-columns: minmax(0, 1fr) 44px;
+        gap: 6px;
+      }
     }
   </style>
 </head>
@@ -230,11 +309,11 @@
         <span class="count-label">Days</span>
       </div>
       <div class="count-tile">
-        <span class="count-value" id="hours">21</span>
+        <span class="count-value" id="hours">20</span>
         <span class="count-label">Hours</span>
       </div>
       <div class="count-tile">
-        <span class="count-value" id="minutes">10</span>
+        <span class="count-value" id="minutes">57</span>
         <span class="count-label">Minutes</span>
       </div>
       <div class="count-tile">
@@ -243,27 +322,33 @@
       </div>
     </div>
 
-    <div class="progress-wrap">
-      <p class="milestone-title">PPWR 적용 · TD 작성 의무 시작</p>
-      <div class="progress-meta">
-        <span>2025.02.11 발효</span>
-        <span id="progressText">88.7%</span>
-        <span>2026.08.12 적용</span>
+    <div class="progress-grid">
+      <div class="progress-wrap">
+        <div class="progress-meta">
+          <span>2025.02.11 발효</span>
+          <span class="milestone-title">PPWR 적용 · TD 작성 의무 시작</span>
+          <span>2026.08.12 적용</span>
+        </div>
+        <div class="progress-line">
+          <div class="progress-track" aria-label="PPWR 적용 준비 진행률">
+            <div class="progress-fill" id="progressFill" style="width: 88.6877%;"></div>
+          </div>
+          <span class="progress-percent" id="progressText">88.7%</span>
+        </div>
       </div>
-      <div class="progress-track" aria-label="PPWR 적용 준비 진행률">
-        <div class="progress-fill" id="progressFill" style="width: 88.6861%;"></div>
-      </div>
-    </div>
 
-    <div class="progress-wrap">
-      <p class="milestone-title">포장재 조화 라벨링 의무 시작</p>
-      <div class="progress-meta">
-        <span>2026.08.12 적용</span>
-        <span id="labelProgressText">0.0%</span>
-        <span>2028.08.12 시작</span>
-      </div>
-      <div class="progress-track" aria-label="포장재 조화 라벨링 의무 시작 준비 진행률">
-        <div class="progress-fill" id="labelProgressFill" style="width: 0%;"></div>
+      <div class="progress-wrap">
+        <div class="progress-meta">
+          <span>2026.08.12 적용</span>
+          <span class="milestone-title">포장재 조화 라벨링 의무 시작</span>
+          <span>2028.08.12 시작</span>
+        </div>
+        <div class="progress-line">
+          <div class="progress-track" aria-label="포장재 조화 라벨링 의무 시작 준비 진행률">
+            <div class="progress-fill" id="labelProgressFill" style="width: 0%;"></div>
+          </div>
+          <span class="progress-percent" id="labelProgressText">0.0%</span>
+        </div>
       </div>
     </div>
 
