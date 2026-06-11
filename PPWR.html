@@ -1,0 +1,333 @@
+<html lang="ko"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PPWR Countdown</title>
+  <link rel="stylesheet" as="style" crossorigin="" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+
+  <style>
+    :root {
+      color-scheme: light dark;
+      --ui-font: "Pretendard", sans-serif;
+      --panel-border: #d9d9d9;
+      --field-border: #cfcfcf;
+      --text-main: #111;
+      --text-label: #444;
+      --placeholder: #9a9a9a;
+      --tile-bg: rgba(0,0,0,0.03);
+      --tile-hover: rgba(0,0,0,0.06);
+      --accent: #ff3b3b;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --panel-border: #3a3a3a;
+        --field-border: #444444;
+        --text-main: #f0f0f0;
+        --text-label: #aaaaaa;
+        --placeholder: #666666;
+        --tile-bg: rgba(255,255,255,0.04);
+        --tile-hover: rgba(255,255,255,0.08);
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--ui-font);
+      background: transparent;
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 20px;
+    }
+
+    .countdown-panel {
+      width: 100%;
+      max-width: 800px;
+      padding: 20px 24px 24px;
+      border: 1px solid var(--panel-border);
+      border-radius: 14px;
+      background: transparent;
+    }
+
+    .tool-title {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--text-main);
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.2;
+      text-align: center;
+      text-decoration: none;
+      cursor: default;
+    }
+
+    .target-line {
+      margin-bottom: 16px;
+      color: var(--placeholder);
+      font-size: 13px;
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    .count-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .count-tile {
+      min-height: 74px;
+      padding: 12px 8px;
+      border: 1px solid var(--field-border);
+      border-radius: 6px;
+      background: var(--tile-bg);
+      text-align: center;
+    }
+
+    .count-value {
+      display: block;
+      color: var(--text-main);
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .count-label {
+      display: block;
+      margin-top: 6px;
+      color: var(--text-label);
+      font-size: 13px;
+      line-height: 1.2;
+    }
+
+    .progress-wrap {
+      margin-top: 14px;
+    }
+
+    .progress-wrap + .progress-wrap {
+      margin-top: 12px;
+    }
+
+    .milestone-title {
+      margin-bottom: 6px;
+      color: var(--text-label);
+      font-size: 13px;
+      line-height: 1.35;
+      text-align: center;
+    }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 6px;
+      color: var(--placeholder);
+      font-size: 13px;
+      line-height: 1.3;
+    }
+
+    .progress-track {
+      height: 8px;
+      overflow: hidden;
+      border: 1px solid var(--field-border);
+      border-radius: 6px;
+      background: transparent;
+    }
+
+    .progress-fill {
+      width: 0;
+      height: 100%;
+      border-radius: 6px;
+      background: var(--accent);
+      transition: width 0.4s ease;
+    }
+
+    .info-row {
+      display: none;
+    }
+
+    .info-item {
+      min-height: 40px;
+      padding: 8px 10px;
+      border: 1px solid var(--field-border);
+      border-radius: 6px;
+      background: transparent;
+      color: var(--text-label);
+      font-size: 13px;
+      line-height: 1.35;
+      text-align: center;
+    }
+
+    .status {
+      margin-top: 10px;
+      color: var(--placeholder);
+      font-size: 13px;
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      .countdown-panel {
+        padding: 16px 18px 18px;
+      }
+
+      .tool-title {
+        margin-bottom: 4px;
+        font-size: 21px;
+      }
+
+      .target-line {
+        margin-bottom: 12px;
+      }
+
+      .count-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 6px;
+      }
+
+      .count-tile {
+        min-height: 54px;
+        padding: 8px 4px;
+      }
+
+      .count-value {
+        font-size: 20px;
+      }
+
+      .count-label {
+        margin-top: 4px;
+        font-size: 11px;
+      }
+
+      .info-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+        margin-top: 10px;
+      }
+
+      .progress-wrap {
+        margin-top: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="countdown-panel">
+    <h1 class="tool-title">PPWR</h1>
+    <p class="target-line">EU Packaging and Packaging Waste Regulation 적용일까지</p>
+
+    <div class="count-grid" aria-label="PPWR 적용일 카운트다운">
+      <div class="count-tile">
+        <span class="count-value" id="days">61</span>
+        <span class="count-label">Days</span>
+      </div>
+      <div class="count-tile">
+        <span class="count-value" id="hours">21</span>
+        <span class="count-label">Hours</span>
+      </div>
+      <div class="count-tile">
+        <span class="count-value" id="minutes">10</span>
+        <span class="count-label">Minutes</span>
+      </div>
+      <div class="count-tile">
+        <span class="count-value" id="seconds">37</span>
+        <span class="count-label">Seconds</span>
+      </div>
+    </div>
+
+    <div class="progress-wrap">
+      <p class="milestone-title">PPWR 적용 · TD 작성 의무 시작</p>
+      <div class="progress-meta">
+        <span>2025.02.11 발효</span>
+        <span id="progressText">88.7%</span>
+        <span>2026.08.12 적용</span>
+      </div>
+      <div class="progress-track" aria-label="PPWR 적용 준비 진행률">
+        <div class="progress-fill" id="progressFill" style="width: 88.6861%;"></div>
+      </div>
+    </div>
+
+    <div class="progress-wrap">
+      <p class="milestone-title">포장재 조화 라벨링 의무 시작</p>
+      <div class="progress-meta">
+        <span>2026.08.12 적용</span>
+        <span id="labelProgressText">0.0%</span>
+        <span>2028.08.12 시작</span>
+      </div>
+      <div class="progress-track" aria-label="포장재 조화 라벨링 의무 시작 준비 진행률">
+        <div class="progress-fill" id="labelProgressFill" style="width: 0%;"></div>
+      </div>
+    </div>
+
+    <p class="status" id="statusText">기준 시각: Europe/Brussels 2026.08.12 00:00</p>
+  </main>
+
+  <script>
+    const startDate = new Date("2025-02-11T00:00:00+01:00");
+    const targetDate = new Date("2026-08-12T00:00:00+02:00");
+    const labelDate = new Date("2028-08-12T00:00:00+02:00");
+    const dayEl = document.getElementById("days");
+    const hourEl = document.getElementById("hours");
+    const minuteEl = document.getElementById("minutes");
+    const secondEl = document.getElementById("seconds");
+    const progressText = document.getElementById("progressText");
+    const progressFill = document.getElementById("progressFill");
+    const labelProgressText = document.getElementById("labelProgressText");
+    const labelProgressFill = document.getElementById("labelProgressFill");
+    const statusText = document.getElementById("statusText");
+
+    function pad(value) {
+      return String(value).padStart(2, "0");
+    }
+
+    function updateCountdown() {
+      const now = new Date();
+      const diff = targetDate - now;
+      const progress = getProgress(startDate, targetDate, now);
+      const labelProgress = getProgress(targetDate, labelDate, now);
+
+      progressText.textContent = `${progress.toFixed(1)}%`;
+      progressFill.style.width = `${progress}%`;
+      labelProgressText.textContent = `${labelProgress.toFixed(1)}%`;
+      labelProgressFill.style.width = `${labelProgress}%`;
+
+      if (diff <= 0) {
+        dayEl.textContent = "0";
+        hourEl.textContent = "00";
+        minuteEl.textContent = "00";
+        secondEl.textContent = "00";
+        statusText.textContent = "PPWR 적용일이 도래했습니다.";
+        return;
+      }
+
+      const days = Math.floor(diff / 86400000);
+      const hours = Math.floor((diff % 86400000) / 3600000);
+      const minutes = Math.floor((diff % 3600000) / 60000);
+      const seconds = Math.floor((diff % 60000) / 1000);
+
+      dayEl.textContent = days.toLocaleString("ko-KR");
+      hourEl.textContent = pad(hours);
+      minuteEl.textContent = pad(minutes);
+      secondEl.textContent = pad(seconds);
+    }
+
+    function getProgress(start, end, now) {
+      const total = end - start;
+      const elapsed = now - start;
+      return Math.min(Math.max((elapsed / total) * 100, 0), 100);
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+
+
+</body></html>
