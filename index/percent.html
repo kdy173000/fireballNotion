@@ -220,105 +220,102 @@
     const hintText = document.getElementById("hintText");
     const modeButtons = document.querySelectorAll(".mode-btn");
 
-    let mode = "change";
-    let isUpdating = false;
+    let mode = "discount";
+    const inputs = { before: bEl, after: aEl, pct: pEl };
+    let entered = [];
+    let calculated = null;
 
     function parseValue(el) {
-      return parseFloat(String(el.value).replace(/,/g, ""));
+      const text = el.value.replace(/,/g, "").trim();
+      return text === "" ? NaN : Number(text);
     }
 
     function setNumber(el, value) {
-      if (!isFinite(value)) {
+      if (!Number.isFinite(value)) {
         el.value = "";
         return;
       }
 
-      const rounded = Math.round(value * 100) / 100;
+      const rounded = Math.round((value + Number.EPSILON) * 100) / 100;
       el.value = rounded.toLocaleString("ko-KR", {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2
       });
     }
 
-    function clearValues() {
-      bEl.value = "";
-      aEl.value = "";
-      pEl.value = "";
-    }
-
-    function calcChange(changed) {
+    function calculate(missing) {
       const before = parseValue(bEl);
       const after = parseValue(aEl);
       const percent = parseValue(pEl);
+      const factor = mode === "discount" ? 1 - percent / 100 : 1 + percent / 100;
 
-      if (changed === "pct" && !isNaN(before) && !isNaN(percent)) {
-        setNumber(aEl, before * (1 + percent / 100));
-        return;
+      if (missing === "after") {
+        return before * factor;
       }
-
-      if (changed === "after" && isNaN(before) && !isNaN(after) && !isNaN(percent) && percent !== -100) {
-        setNumber(bEl, after / (1 + percent / 100));
-        return;
+      if (missing === "before") {
+        return factor === 0 ? NaN : after / factor;
       }
-
-      if (!isNaN(before) && !isNaN(after) && before !== 0) {
-        setNumber(pEl, ((after - before) / before) * 100);
+      if (missing === "pct") {
+        if (before === 0) return NaN;
+        return (mode === "discount" ? 1 - after / before : after / before - 1) * 100;
       }
-    }
-
-    function calcDiscount(changed) {
-      const price = parseValue(bEl);
-      const result = parseValue(aEl);
-      const discount = parseValue(pEl);
-
-      if ((changed === "before" || changed === "pct") && !isNaN(price) && !isNaN(discount)) {
-        setNumber(aEl, price * (1 - discount / 100));
-        return;
-      }
-
-      if (changed === "after" && !isNaN(price) && price !== 0 && !isNaN(result)) {
-        setNumber(pEl, (1 - result / price) * 100);
-      }
+      return NaN;
     }
 
     function calc(changed) {
-      if (isUpdating) return;
-      isUpdating = true;
-
-      if (mode === "discount") {
-        calcDiscount(changed);
-      } else {
-        calcChange(changed);
+      // 직접 입력한 최근 두 칸을 기준으로 나머지 한 칸만 자동 계산
+      entered = entered.filter(key => key !== changed);
+      if (inputs[changed].value.trim() !== "") {
+        entered.push(changed);
       }
 
-      isUpdating = false;
+      if (entered.length > 2) {
+        entered.shift();
+      }
+
+      const missing = Object.keys(inputs).find(key => !entered.includes(key));
+      if (calculated && calculated !== missing && !entered.includes(calculated)) {
+        inputs[calculated].value = "";
+      }
+      calculated = missing;
+
+      if (entered.length !== 2 || entered.some(key => !Number.isFinite(parseValue(inputs[key])))) {
+        if (calculated) inputs[calculated].value = "";
+        return;
+      }
+
+      setNumber(inputs[missing], calculate(missing));
     }
 
     function setMode(nextMode) {
       mode = nextMode;
       modeButtons.forEach(btn => btn.classList.toggle("active", btn.dataset.mode === mode));
-      clearValues();
+      Object.values(inputs).forEach(el => { el.value = ""; });
+      entered = [];
+      calculated = null;
 
       if (mode === "discount") {
         beforeLabel.textContent = "정가";
         afterLabel.textContent = "할인가";
         pctLabel.textContent = "할인율";
-        hintText.textContent = "정가/할인율을 입력하면 할인가가 계산됩니다.";
+        hintText.textContent = "세 항목 중 두 개를 입력하면 나머지 하나가 자동 계산됩니다.";
       } else {
         beforeLabel.textContent = "전";
         afterLabel.textContent = "후";
         pctLabel.textContent = "변화율";
-        hintText.textContent = "전/후 값을 입력하면 변화율이 계산됩니다.";
+        hintText.textContent = "세 항목 중 두 개를 입력하면 나머지 하나가 자동 계산됩니다.";
       }
     }
 
-    bEl.addEventListener("input", () => calc("before"));
-    aEl.addEventListener("input", () => calc("after"));
-    pEl.addEventListener("input", () => calc("pct"));
+    Object.entries(inputs).forEach(([key, el]) => {
+      el.addEventListener("input", () => calc(key));
+    });
 
     modeButtons.forEach(btn => {
       btn.addEventListener("click", () => setMode(btn.dataset.mode));
     });
+
+    setMode("discount");
   </script>
 
 
