@@ -135,6 +135,28 @@
       transition: border-color 0.2s;
     }
 
+    .percent-input {
+      position: relative;
+    }
+
+    .percent-input input {
+      padding-right: 32px;
+    }
+
+    .percent-symbol {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-sub);
+      font-size: 15px;
+      pointer-events: none;
+    }
+
+    .percent-input input:placeholder-shown + .percent-symbol {
+      display: none;
+    }
+
     input::placeholder {
       color: var(--placeholder);
     }
@@ -203,7 +225,10 @@
 
       <div class="field">
         <label for="pct" id="pctLabel">할인율</label>
-        <input type="text" id="pct" placeholder="0" inputmode="decimal">
+        <div class="percent-input">
+          <input type="text" id="pct" placeholder="0" inputmode="decimal">
+          <span class="percent-symbol" aria-hidden="true">%</span>
+        </div>
       </div>
     </div>
 
